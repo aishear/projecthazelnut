@@ -13,8 +13,9 @@ public:
 
 
 	void addPlanetEntity(sf::Vector2f position, sf::Vector2f delta, float mass, float radius);
-
-	void removePlanetEntity(unsigned id);
+	void removeEntity(unsigned id);
+	
+	int numEntities();
 
 private:
 	map<unsigned, EntityType> _entityMap;

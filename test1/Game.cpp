@@ -5,7 +5,8 @@
 #include "PositionMap.h"
 #include "CollisionMap.h"
 #include "TextureManager.h"
-
+#include <sstream>
+#include <cstdlib>
 
 /*
 _______________________________________
@@ -78,12 +79,16 @@ void Game::gameLoop() {
 	//_entityManager.addPlanetEntity(sf::Vector2f(600, 500), sf::Vector2f(0, 10), 100, 4.5);
 	//_entityManager.addPlanetEntity(sf::Vector2f(400,400), sf::Vector2f(0, -10), 100, 4.5);
 	//_entityManager.addPlanetEntity(sf::Vector2f(200, 100), sf::Vector2f(), 100, 4.5);
-	for (int i = 0; i < Game::SCREEN_WIDTH; i+=200){
-		for (int j = 0; j < Game::SCREEN_HEIGHT; j+=200){
-			_entityManager.addPlanetEntity(sf::Vector2f(i, j), sf::Vector2f(i/100, j/100), 500, 4.5);
-		}
+	//for (int i = 0; i < Game::SCREEN_WIDTH; i+=500){
+	//	for (int j = 0; j < Game::SCREEN_HEIGHT; j+=15){
+	//		_entityManager.addPlanetEntity(sf::Vector2f(i, j), sf::Vector2f(i/100, j/100), 500, 4.5);
+	//	}
+	//}
+	for (int i = 0; i < 600; i++){
+		int x = rand() % 1000;
+		int y = rand() % 700;
+		_entityManager.addPlanetEntity(sf::Vector2f(x, y), sf::Vector2f(x/100, y/100), 100, 4.5);
 	}
-
 	while (GetWindow().isOpen())
     {
         sf::Event event;
@@ -105,6 +110,15 @@ void Game::gameLoop() {
 		_renderMap.drawAll();
 		
         GetWindow().display();
+
+		ostringstream ss;
+		ss << 1/deltaTime.asSeconds();
+		string s1(ss.str());
+		ostringstream sss;
+		sss << _entityManager.numEntities();
+		string s2(sss.str());
+		string s("Title " + s1 + "  " + s2);
+		GetWindow().setTitle(s); 
     }
 
 }

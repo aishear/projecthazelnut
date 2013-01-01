@@ -30,25 +30,36 @@ void CollisionMap::removeCollisionComponent(unsigned id) {
 }
 
 void CollisionMap::resolveCollisions() {
-	for_each(begin(_collisionMap), end(_collisionMap), [&](pair<unsigned, CollisionComponent*> i){
+	bool collisionDetected = false;
+	set<unsigned> removeIds;
 
-		for_each(begin(_collisionMap), end(_collisionMap), [&](pair<unsigned, CollisionComponent*> j){
+	for (auto i = begin(_collisionMap); i != end(_collisionMap); i++) {
+		for (auto j = begin(_collisionMap); j != end(_collisionMap); j++) {
 			if (i != j) {
-				auto positionI = Game::getPositionMap().getPositionComponent(i.second->getId());
-				auto positionJ = Game::getPositionMap().getPositionComponent(j.second->getId());
+				auto positionI = Game::getPositionMap().getPositionComponent(i->second->getId());
+				auto positionJ = Game::getPositionMap().getPositionComponent(j->second->getId());
 
 				if (isCircleColliding(positionI->getPosition(), 4.5, positionJ->getPosition(), 4.5)) {
-					
+					collisionDetected = true;
+
 					if (positionI->getMass() > positionJ->getMass()) {
 						resolveCollision(positionI, positionJ);
+						removeIds.insert(positionJ->getId());
 					}else{
 						resolveCollision(positionJ, positionI);
+						removeIds.insert(positionI->getId());
 					}
 				}
 
 			}
+		}
+	}
+
+	if (collisionDetected) {
+		for_each(begin(removeIds), end(removeIds), [=](unsigned id) {
+			Game::getEntityManager().removeEntity(id);
 		});
-	});
+	}
 
 }
 
@@ -76,38 +87,3 @@ void CollisionMap::resolveCollision(PositionComponent* large, PositionComponent*
 
 	small->setMass(0); //the small object's mass will be set to 0 so that it can later be detected and removed
 }
-
-/*
-
-bool PlanetaryBodyManager::isColliding(PlanetaryBody* x, PlanetaryBody* y) {
-	sf::Vector2f position1 = x->getPosition();
-	sf::Vector2f position2 = y->getPosition();
-
-	float dx = position2.x - position1.x;
-	float dy = position2.y - position1.y;
-	float radii = x->getRadius() + y->getRadius();
-	
-	//check for collisions
-	return (( dx * dx )  + ( dy * dy ) < radii * radii);  //both sides have been squared
-
-}
-
-void PlanetaryBodyManager::resolveCollision(PlanetaryBody* large, PlanetaryBody* small) {
-	//small object will merge into large body
-	
-		
-	//add the mass to the larger body and transfer the vector from the smaller to the larger body
-	//the ratio of the masses is used to prevent very small objects from efecting large objects too much
-
-	float massRatio = small->getMass() / large->getMass();
-	large->setVector(large->getVector() + (massRatio * small->getVector()));
-	large->setMass(large->getMass() + small->getMass());
-	//large->setRadius(log10(large->getMass()));
-	large->setRadius(sqrt(large->getRadius() * large->getRadius() + small->getRadius() * small->getRadius()));
-	
-	small->setMass(0); //the small object's mass will be set to 0 so that it can later be detected and removed
-			
-
-}
-
-*/
