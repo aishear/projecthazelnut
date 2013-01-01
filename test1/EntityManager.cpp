@@ -33,7 +33,7 @@ void EntityManager::addPlanetEntity(sf::Vector2f position, sf::Vector2f delta, f
 	Game::getCollisionMap().addCollisionComponent(id, CollisionComponent::Circle);
 }
 
-void  EntityManager::removePlanetEntity(unsigned id) {
+void  EntityManager::removeEntity(unsigned id) {
 	auto type = _entityMap.find(id)->second;
 	switch(type) {
 		case Planet:
@@ -44,4 +44,8 @@ void  EntityManager::removePlanetEntity(unsigned id) {
 			break;
 
 	}
+}
+
+int EntityManager::numEntities() {
+	return _entityMap.size();
 }
