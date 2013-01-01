@@ -26,7 +26,7 @@ _______________________________________
 
 gavity field view
 -many vectors (drawn as lines) that show gravy field on map
-
+-dotted line trails for objects
 */
 
 
