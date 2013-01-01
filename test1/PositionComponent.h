@@ -11,6 +11,7 @@ public:
 	sf::Vector2f getPosition();
 	sf::Vector2f getDelta();
 	float getMass();
+	unsigned getId();
 
 	void setPosition(sf::Vector2f position);
 	void setDelta(sf::Vector2f delta);

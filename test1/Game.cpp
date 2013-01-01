@@ -3,6 +3,7 @@
 #include "EntityManager.h"
 #include "RenderMap.h"
 #include "PositionMap.h"
+#include "CollisionMap.h"
 #include "TextureManager.h"
 
 
@@ -52,8 +53,16 @@ PositionMap& Game::getPositionMap() {
 	return _positionMap;
 }
 
+CollisionMap& Game::getCollisionMap() {
+	return _collisionMap;
+}
+
 TextureManager& Game::getTextureManager() {
 	return _textureManager;
+}
+
+EntityManager& Game::getEntityManager() {
+	return _entityManager;
 }
 
 int Game::getScreenWidth() {
@@ -69,9 +78,9 @@ void Game::gameLoop() {
 	//_entityManager.addPlanetEntity(sf::Vector2f(600, 500), sf::Vector2f(0, 10), 100, 4.5);
 	//_entityManager.addPlanetEntity(sf::Vector2f(400,400), sf::Vector2f(0, -10), 100, 4.5);
 	//_entityManager.addPlanetEntity(sf::Vector2f(200, 100), sf::Vector2f(), 100, 4.5);
-	for (int i = 0; i < Game::SCREEN_WIDTH; i+=75){
-		for (int j = 0; j < Game::SCREEN_HEIGHT; j+=75){
-			_entityManager.addPlanetEntity(sf::Vector2f(i, j), sf::Vector2f(i/100, j/100), 100, 4.5);
+	for (int i = 0; i < Game::SCREEN_WIDTH; i+=200){
+		for (int j = 0; j < Game::SCREEN_HEIGHT; j+=200){
+			_entityManager.addPlanetEntity(sf::Vector2f(i, j), sf::Vector2f(i/100, j/100), 500, 4.5);
 		}
 	}
 
@@ -91,6 +100,7 @@ void Game::gameLoop() {
 
 		auto deltaTime = _clock.restart();
 		_positionMap.updateGravity();
+		_collisionMap.resolveCollisions();
 		_positionMap.updateComponents(deltaTime.asSeconds());
 		_renderMap.drawAll();
 		
@@ -104,4 +114,5 @@ sf::Clock Game::_clock;
 EntityManager  Game::_entityManager;
 RenderMap  Game::_renderMap;
 PositionMap Game::_positionMap;
+CollisionMap Game::_collisionMap;
 TextureManager Game::_textureManager;

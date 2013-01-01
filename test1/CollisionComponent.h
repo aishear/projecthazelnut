@@ -5,15 +5,15 @@ using namespace std;
 
 class CollisionComponent {
 public:
-	enum shapeType {Circle, Triangle};
+	enum ShapeType {Circle, Triangle};
 
-	CollisionComponent(unsigned id, shapeType shape);
+	CollisionComponent(unsigned id, ShapeType shape);
 	~CollisionComponent();
 	
 	unsigned getId() const;
 	
 	
 private:
-	shapeType _shape;
+	ShapeType _shape;
 	unsigned _id;
 };
