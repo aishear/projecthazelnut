@@ -2,7 +2,7 @@
 #include "TextureManager.h"
 
 TextureManager::TextureManager() {
-	_t.loadFromFile("D:/Programming/SFML/projects/test1 - Copy/Debug/test.png");
+	_t.loadFromFile("D:/Programming/SFML/projects/projectHazelnut/Debug/test.png");
 }
 
 sf::Texture& TextureManager::getTestTexture() {
