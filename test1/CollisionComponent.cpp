@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CollisionComponent.h"
 
-	CollisionComponent::CollisionComponent(unsigned id, shapeType shape) 
+	CollisionComponent::CollisionComponent(unsigned id, ShapeType shape) 
 		: _id(id), _shape(shape)
 	{
 

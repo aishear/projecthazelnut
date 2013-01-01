@@ -12,6 +12,7 @@ public:
 
 	RenderComponent* getRenderComponent(unsigned id);
 	void addRenderComponent(unsigned id, sf::Sprite& sprite);
+	void removeRenderComponent(unsigned id);
 	void drawAll();
 
 private:

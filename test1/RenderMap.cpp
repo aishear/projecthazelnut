@@ -22,6 +22,12 @@ void RenderMap::addRenderComponent(unsigned id, sf::Sprite& sprite) {
 	_renderMap.insert(pair<unsigned, RenderComponent*>(id, rc));
 }
 
+void RenderMap::removeRenderComponent(unsigned id) {
+	auto rc = _renderMap.find(id)->second;
+	delete rc;
+	_renderMap.erase(id);
+}
+
 void RenderMap::drawAll() {
 	for_each(begin(_renderMap), end(_renderMap), [&](pair<unsigned, RenderComponent*> i){
 		i.second->draw(Game::GetWindow());

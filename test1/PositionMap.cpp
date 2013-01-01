@@ -21,6 +21,12 @@ void PositionMap::addPositionComponent(unsigned id, sf::Vector2f position, sf::V
 	_positionMap.insert(pair<unsigned, PositionComponent*>(id, pc));
 }
 
+void PositionMap::removePositionComponent(unsigned id) {
+	auto pc = _positionMap.find(id)->second;
+	delete pc;
+	_positionMap.erase(id);
+}
+
 void PositionMap::updateGravity() {
 	for_each(begin(_positionMap), end(_positionMap), [&](pair<unsigned, PositionComponent*> i){
 		
@@ -28,20 +34,20 @@ void PositionMap::updateGravity() {
 		auto position1 = componentI->getPosition();
 
 		for_each(begin(_positionMap), end(_positionMap), [&](pair<unsigned, PositionComponent*> j){
-			//note this will simulate gravity when i and j are the same object
+			if (i != j) {
 
-			auto componentJ = j.second;
-			auto position2 = componentJ->getPosition();
-			auto mass2 = componentJ->getMass();
+				auto componentJ = j.second;
+				auto position2 = componentJ->getPosition();
+				auto mass2 = componentJ->getMass();
 
-			//update vectors for gravity
-			sf::Vector2f difference = position1 - position2;
-			if (difference.x != 0 && difference.y != 0){ //prevent division by zero
-				float distance = sqrt(difference.x*difference.x + difference.y*difference.y);
-				sf::Vector2f acceleration =  1.f * mass2 * (difference / (distance*distance*distance));
-				componentI->setDelta(componentI->getDelta() - acceleration);
+				//update vectors for gravity
+				sf::Vector2f difference = position1 - position2;
+				if (difference.x != 0 && difference.y != 0){ //prevent division by zero
+					float distance = sqrt(difference.x*difference.x + difference.y*difference.y);
+					sf::Vector2f acceleration =  1.f * mass2 * (difference / (distance*distance*distance));
+					componentI->setDelta(componentI->getDelta() - acceleration);
+				}
 			}
-
 		});
 	});
 }

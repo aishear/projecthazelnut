@@ -23,6 +23,10 @@
 		return _mass;
 	}
 
+	unsigned PositionComponent::getId() {
+		return _id;
+	}
+
 	void PositionComponent::setPosition(sf::Vector2f position) {
 		_position = position;
 	}
