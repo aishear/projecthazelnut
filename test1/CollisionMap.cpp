@@ -18,8 +18,8 @@ CollisionComponent* CollisionMap::getCollisionComponent(unsigned id) {
 	return _collisionMap.find(id)->second;
 }
 
-void CollisionMap::addCollisionComponent(unsigned id, CollisionComponent::ShapeType shape) {
-	auto cc = new CollisionComponent(id, shape);
+void CollisionMap::addCollisionComponent(unsigned id, CollisionComponent::ShapeType shape, float width, float height) {
+	auto cc = new CollisionComponent(id, shape, width, height);
 	_collisionMap.insert(pair<unsigned, CollisionComponent*>(id, cc));
 }
 
@@ -38,15 +38,17 @@ void CollisionMap::resolveCollisions() {
 			if (i != j) {
 				auto positionI = Game::getPositionMap().getPositionComponent(i->second->getId());
 				auto positionJ = Game::getPositionMap().getPositionComponent(j->second->getId());
+				
 
-				if (isCircleColliding(positionI->getPosition(), 4.5, positionJ->getPosition(), 4.5)) {
+
+				if (isCircleColliding(positionI->getPosition(), i->second->getWidth()/2, positionJ->getPosition(), j->second->getWidth()/2)) {
 					collisionDetected = true;
 
 					if (positionI->getMass() > positionJ->getMass()) {
-						resolveCollision(positionI, positionJ);
+						resolveCollision(positionI, positionJ, i->second, j->second);
 						removeIds.insert(positionJ->getId());
 					}else{
-						resolveCollision(positionJ, positionI);
+						resolveCollision(positionJ, positionI, j->second, i->second);
 						removeIds.insert(positionI->getId());
 					}
 				}
@@ -72,7 +74,7 @@ bool CollisionMap::isCircleColliding(sf::Vector2f position1, float radius1, sf::
 	return (( dx * dx )  + ( dy * dy ) < radii * radii);  //both sides have been squared
 }
 
-void CollisionMap::resolveCollision(PositionComponent* large, PositionComponent* small) {
+void CollisionMap::resolveCollision(PositionComponent* large, PositionComponent* small, CollisionComponent* largeCollision, CollisionComponent* smallCollision) {
 	//small object will merge into large body
 	
 	//add the mass to the larger body and transfer the vector from the smaller to the larger body
@@ -81,9 +83,17 @@ void CollisionMap::resolveCollision(PositionComponent* large, PositionComponent*
 	float massRatio = small->getMass() / large->getMass();
 	large->setDelta(large->getDelta() + (massRatio * small->getDelta()));
 	large->setMass(large->getMass() + small->getMass());
-	//large->setRadius(log10(large->getMass()));
-	//large->setRadius(sqrt(large->getRadius() * large->getRadius() + small->getRadius() * small->getRadius()));
-	
 
-	small->setMass(0); //the small object's mass will be set to 0 so that it can later be detected and removed
+	auto largeRadius = largeCollision->getWidth()/2;
+	auto smallRadius = smallCollision->getWidth()/2;
+
+	auto newRadius = sqrt(largeRadius*largeRadius + smallRadius*smallRadius);
+
+	largeCollision->setHeight(newRadius*2);
+	largeCollision->setWidth(newRadius*2);
+
+	//stretch graphics
+	auto id = large->getId();
+	auto width = Game::getTextureManager().getTestTexture().getSize().x;
+	Game::getRenderMap().getRenderComponent(id)->changeSize((newRadius*2)/width, (newRadius*2)/width, newRadius);
 }

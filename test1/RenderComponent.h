@@ -9,7 +9,7 @@ public:
 	~RenderComponent();
 
 	void draw(sf::RenderWindow& rw);
-
+	void changeSize(float factorX, float factorY, float radius);
 
 private:
 	sf::Sprite _sprite;
