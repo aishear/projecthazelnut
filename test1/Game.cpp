@@ -76,19 +76,12 @@ int Game::getScreenHeight() {
 
 void Game::gameLoop() {
 
-	//_entityManager.addPlanetEntity(sf::Vector2f(600, 500), sf::Vector2f(0, 10), 100, 4.5);
-	//_entityManager.addPlanetEntity(sf::Vector2f(400,400), sf::Vector2f(0, -10), 100, 4.5);
-	//_entityManager.addPlanetEntity(sf::Vector2f(200, 100), sf::Vector2f(), 100, 4.5);
-	//for (int i = 0; i < Game::SCREEN_WIDTH; i+=500){
-	//	for (int j = 0; j < Game::SCREEN_HEIGHT; j+=15){
-	//		_entityManager.addPlanetEntity(sf::Vector2f(i, j), sf::Vector2f(i/100, j/100), 500, 4.5);
-	//	}
-	//}
-	for (int i = 0; i < 600; i++){
+	for (int i = 0; i < 30; i++){
 		int x = rand() % 1000;
 		int y = rand() % 700;
-		_entityManager.addPlanetEntity(sf::Vector2f(x, y), sf::Vector2f(x/100, y/100), 100, 4.5);
+		_entityManager.addPlanetEntity(sf::Vector2f(x, y), sf::Vector2f(x/100, y/100), 100, 10);
 	}
+
 	while (GetWindow().isOpen())
     {
         sf::Event event;
@@ -111,6 +104,7 @@ void Game::gameLoop() {
 		
         GetWindow().display();
 
+		//update title
 		ostringstream ss;
 		ss << 1/deltaTime.asSeconds();
 		string s1(ss.str());

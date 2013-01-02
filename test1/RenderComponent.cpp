@@ -17,3 +17,8 @@ void RenderComponent::draw(sf::RenderWindow& rw) {
 	_sprite.setPosition(position);
 	rw.draw(_sprite);
 }
+
+void RenderComponent::changeSize(float factorX, float factorY, float radius) {
+	_sprite.setScale(factorX, factorY);
+	_sprite.setOrigin(radius, radius);
+}

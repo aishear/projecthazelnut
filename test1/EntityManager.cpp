@@ -28,9 +28,13 @@ void EntityManager::addPlanetEntity(sf::Vector2f position, sf::Vector2f delta, f
 	s.setOrigin(radius, radius);
 	s.setPosition(position);
 	s.setTexture(Game::getTextureManager().getTestTexture());
+
+	auto size = (radius*2)/s.getTexture()->getSize().x;
+	s.setScale(size, size);
+
 	Game::getRenderMap().addRenderComponent(id, s);
 	Game::getPositionMap().addPositionComponent(id, position, delta, mass);
-	Game::getCollisionMap().addCollisionComponent(id, CollisionComponent::Circle);
+	Game::getCollisionMap().addCollisionComponent(id, CollisionComponent::Circle, radius*2, radius*2);
 }
 
 void  EntityManager::removeEntity(unsigned id) {

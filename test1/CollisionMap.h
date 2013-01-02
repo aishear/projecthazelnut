@@ -12,12 +12,12 @@ public:
 	~CollisionMap();
 
 	CollisionComponent* getCollisionComponent(unsigned id);
-	void addCollisionComponent(unsigned id, CollisionComponent::ShapeType shape);
+	void addCollisionComponent(unsigned id, CollisionComponent::ShapeType shape, float width, float height);
 	void removeCollisionComponent(unsigned id);
 
 	void resolveCollisions();
 	static bool isCircleColliding(sf::Vector2f position1, float radius1, sf::Vector2f position2, float radius2);
-	static void resolveCollision(PositionComponent* large, PositionComponent* small);
+	static void resolveCollision(PositionComponent* large, PositionComponent* small, CollisionComponent* largeCollision, CollisionComponent* smallCollision);
 
 private:
 
