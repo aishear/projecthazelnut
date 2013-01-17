@@ -79,7 +79,7 @@ void Game::gameLoop() {
 	for (int i = 0; i < 30; i++){
 		int x = rand() % 1000;
 		int y = rand() % 700;
-		_entityManager.addPlanetEntity(sf::Vector2f(x, y), sf::Vector2f(x/100, y/100), 100, 10);
+		_entityManager.addPlanetEntity(sf::Vector2f(x, y), sf::Vector2f(x/100, y/100), 500, 5);
 	}
 
 	while (GetWindow().isOpen())
