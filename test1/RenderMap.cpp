@@ -29,7 +29,8 @@ void RenderMap::removeRenderComponent(unsigned id) {
 }
 
 void RenderMap::drawAll() {
+	sf::RenderWindow& window = Game::GetWindow();
 	for_each(begin(_renderMap), end(_renderMap), [&](pair<unsigned, RenderComponent*> i){
-		i.second->draw(Game::GetWindow());
+		i.second->draw(window);
 	});
 }
