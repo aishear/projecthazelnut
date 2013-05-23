@@ -105,6 +105,7 @@ void Game::gameLoop() {
         GetWindow().display();
 
 		//update title
+		/*
 		ostringstream ss;
 		ss << 1/deltaTime.asSeconds();
 		string s1(ss.str());
@@ -113,6 +114,7 @@ void Game::gameLoop() {
 		string s2(sss.str());
 		string s("Title " + s1 + "  " + s2);
 		GetWindow().setTitle(s); 
+		*/
     }
 
 }
