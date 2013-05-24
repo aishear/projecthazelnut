@@ -16,6 +16,7 @@ public:
 	static CollisionMap& getCollisionMap();
 	static TextureManager& getTextureManager();
 	static EntityManager& getEntityManager();
+	
 
 	static int getScreenWidth();
 	static int getScreenHeight();
@@ -26,12 +27,20 @@ private:
 	const static int SCREEN_HEIGHT = 768;
 
 	static void gameLoop();
+	static void handleEvents();
+	static void updateView();
 
 	static sf::RenderWindow _mainWindow;
+	static sf::View _view;
 	static sf::Clock _clock;
+
 	static EntityManager _entityManager;
 	static RenderMap _renderMap;
 	static PositionMap _positionMap;
 	static CollisionMap _collisionMap;
 	static TextureManager _textureManager;
+
+	static bool _freeLook;
+	static sf::Vector2i _pressPosition;
+	static sf::Vector2i _viewOffset;
 };

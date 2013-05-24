@@ -13,14 +13,13 @@ _______________________________________
 ---------------TODO LIST---------------
 _______________________________________
 
-1. Pan and zoom
-2. User interface
-3. player object
-4. projectile object
-5. game states
-6. main menu
-7. in-game menu
-8. maps - static and procdually generated
+- User interface
+- player object
+- projectile object
+- game states
+- main menu
+- in-game menu
+- maps - static and procdually generated
 
 _______________________________________
 -----------------IDEAS-----------------
@@ -74,35 +73,75 @@ int Game::getScreenHeight() {
 	return Game::_mainWindow.getSize().y;
 }
 
+void Game::handleEvents(){
+	sf::Event event;
+    while (_mainWindow.pollEvent(event))
+    {
+        switch (event.type) {
+			case sf::Event::Closed:
+				_mainWindow.close();
+				break;
+			case sf::Event::MouseButtonPressed:
+				if (event.mouseButton.button == sf::Mouse::Right) {
+					_freeLook = true;
+					_pressPosition = sf::Vector2i(_viewOffset.x + event.mouseButton.x, _viewOffset.y + event.mouseButton.y);
+				}
+				break;
+			case sf::Event::MouseButtonReleased:
+				if (event.mouseButton.button == sf::Mouse::Right)
+					_freeLook = false;
+				break;
+			case sf::Event::MouseWheelMoved:
+				float zoom = 1 - (event.mouseWheel.delta * 0.25);
+				_view.zoom(zoom);
+				break;
+		}
+    }
+}
+
+void Game::updateView(){
+	if (_freeLook) {
+		auto mousePosition = sf::Mouse::getPosition(_mainWindow);
+		auto dragDistance = _pressPosition - mousePosition;
+		auto delta = _viewOffset - dragDistance;
+		_viewOffset = dragDistance;
+		_view.move(-delta.x, -delta.y);
+	}
+}
+
 void Game::gameLoop() {
 
+	//add random planets
 	for (int i = 0; i < 30; i++){
 		int x = rand() % 1000;
 		int y = rand() % 700;
 		_entityManager.addPlanetEntity(sf::Vector2f(x, y), sf::Vector2f(x/100, y/100), 500, 5);
 	}
 
-	while (GetWindow().isOpen())
+	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+
+	while (_mainWindow.isOpen())
     {
-        sf::Event event;
-        while (GetWindow().pollEvent(event))
-        {
-           switch (event.type) {
-				case sf::Event::Closed:
-					GetWindow().close();
-					break;
-			}
-        }
+		handleEvents();
 
-        GetWindow().clear();
-
+        _mainWindow.clear();
+		
 		auto deltaTime = _clock.restart();
 		_positionMap.updateGravity();
 		_collisionMap.resolveCollisions();
 		_positionMap.updateComponents(deltaTime.asSeconds());
+		
+		updateView();
+		_mainWindow.setView(_view);
 		_renderMap.drawAll();
 		
-        GetWindow().display();
+
+
+		//draw ui stuff unaffected by view
+		_mainWindow.setView(_mainWindow.getDefaultView());
+		//draw ui stuff here
+
+        _mainWindow.display();
 
 		//update title
 		/*
@@ -120,9 +159,14 @@ void Game::gameLoop() {
 }
 
 sf::RenderWindow Game::_mainWindow;
+sf::View Game::_view;
 sf::Clock Game::_clock;
 EntityManager  Game::_entityManager;
 RenderMap  Game::_renderMap;
 PositionMap Game::_positionMap;
 CollisionMap Game::_collisionMap;
 TextureManager Game::_textureManager;
+
+bool Game::_freeLook = false;
+sf::Vector2i Game::_pressPosition;
+sf::Vector2i Game::_viewOffset;
