@@ -5,6 +5,7 @@
 #include "PositionMap.h"
 #include "CollisionMap.h"
 #include "TextureManager.h"
+#include "ButtonComponent.h"
 #include <sstream>
 #include <cstdlib>
 
@@ -121,13 +122,13 @@ void Game::updateView(){
 void Game::gameLoop() {
 
 	//add random planets
-	/*
-	for (int i = 0; i < 400; i++){
+	
+	for (int i = 0; i < 30; i++){
 		int x = rand() % 1000;
 		int y = rand() % 700;
 		_entityManager.addPlanetEntity(sf::Vector2f(x, y), sf::Vector2f(x/100, y/100), 500, 5);
 	}
-	*/
+	
 
 	_entityManager.addPlanetEntity(sf::Vector2f(500, 400), sf::Vector2f(0, 0), 4000, 60);
 	_entityManager.addPlanetEntity(sf::Vector2f(200, 400), sf::Vector2f(0, 130), 100, 5);
@@ -150,8 +151,6 @@ void Game::gameLoop() {
 		_mainWindow.setView(_view);
 		_renderMap.drawAll();
 		
-
-
 		//draw ui stuff unaffected by view
 		_mainWindow.setView(_mainWindow.getDefaultView());
 		//draw ui stuff here

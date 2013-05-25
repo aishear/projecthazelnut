@@ -23,9 +23,10 @@ void EntityManager::addPlanetEntity(sf::Vector2f position, sf::Vector2f delta, f
 	_entityMap.insert(pair<unsigned, EntityType>(id, Planet));
 
 	sf::Sprite s;
-	s.setOrigin(radius, radius);
+	sf::Texture* texture = Game::getTextureManager().getTexture(TextureManager::TestPlanet);
+	s.setOrigin(texture->getSize().x / 2.0, texture->getSize().y / 2.0);
 	s.setPosition(position);
-	s.setTexture(*Game::getTextureManager().getTexture(TextureManager::TestPlanet));
+	s.setTexture(*texture);
 
 	auto size = (radius*2)/s.getTexture()->getSize().x;
 	s.setScale(size, size);
