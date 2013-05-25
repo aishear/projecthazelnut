@@ -43,4 +43,5 @@ private:
 	static bool _freeLook;
 	static sf::Vector2i _pressPosition;
 	static sf::Vector2i _viewOffset;
+	static float _zoomLevel;
 };
