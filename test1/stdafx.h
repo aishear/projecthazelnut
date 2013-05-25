@@ -26,3 +26,4 @@
 #include <list>
 #include <stack>
 #include <set>
+#include <functional>
