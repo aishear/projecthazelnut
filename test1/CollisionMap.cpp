@@ -94,6 +94,6 @@ void CollisionMap::resolveCollision(PositionComponent* large, PositionComponent*
 
 	//stretch graphics
 	auto id = large->getId();
-	auto width = Game::getTextureManager().getTestTexture().getSize().x;
+	auto width = Game::getTextureManager().getTexture(TextureManager::TestPlanet)->getSize().x;
 	Game::getRenderMap().getRenderComponent(id)->changeSize((newRadius*2)/width, (newRadius*2)/width, newRadius);
 }

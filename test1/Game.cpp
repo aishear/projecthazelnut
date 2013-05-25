@@ -92,8 +92,16 @@ void Game::handleEvents(){
 					_freeLook = false;
 				break;
 			case sf::Event::MouseWheelMoved:
-				float zoom = 1 - (event.mouseWheel.delta * 0.25);
-				_view.zoom(zoom);
+				int mouseDelta = event.mouseWheel.delta;
+				if (mouseDelta > 0 && _zoomLevel > .5){
+					_zoomLevel -= .25;
+					float zoom = 1 - (mouseDelta * 0.25);
+					_view.zoom(zoom);
+				}else if (mouseDelta < 0 && _zoomLevel < 4){
+					_zoomLevel += .25;
+					float zoom = 1 - (mouseDelta * 0.25);
+					_view.zoom(zoom);
+				}
 				break;
 		}
     }
@@ -102,21 +110,28 @@ void Game::handleEvents(){
 void Game::updateView(){
 	if (_freeLook) {
 		auto mousePosition = sf::Mouse::getPosition(_mainWindow);
-		auto dragDistance = _pressPosition - mousePosition;
+		auto dragDistance = (_pressPosition - mousePosition);
 		auto delta = _viewOffset - dragDistance;
 		_viewOffset = dragDistance;
-		_view.move(-delta.x, -delta.y);
+		_view.move(-delta.x * _zoomLevel, -delta.y * _zoomLevel);
+		
 	}
 }
 
 void Game::gameLoop() {
 
 	//add random planets
-	for (int i = 0; i < 30; i++){
+	/*
+	for (int i = 0; i < 400; i++){
 		int x = rand() % 1000;
 		int y = rand() % 700;
 		_entityManager.addPlanetEntity(sf::Vector2f(x, y), sf::Vector2f(x/100, y/100), 500, 5);
 	}
+	*/
+
+	_entityManager.addPlanetEntity(sf::Vector2f(500, 400), sf::Vector2f(0, 0), 4000, 60);
+	_entityManager.addPlanetEntity(sf::Vector2f(200, 400), sf::Vector2f(0, 130), 100, 5);
+	_entityManager.addPlanetEntity(sf::Vector2f(250, 400), sf::Vector2f(0, 0), 100, 5);
 
 	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 
@@ -170,3 +185,4 @@ TextureManager Game::_textureManager;
 bool Game::_freeLook = false;
 sf::Vector2i Game::_pressPosition;
 sf::Vector2i Game::_viewOffset;
+float Game::_zoomLevel = 1;

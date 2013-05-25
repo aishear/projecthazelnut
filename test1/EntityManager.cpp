@@ -2,8 +2,6 @@
 #include "EntityManager.h"
 #include "Game.h"
 
-using namespace std;
-
 EntityManager::EntityManager() 
 	: _nextId(0)
 {
@@ -27,7 +25,7 @@ void EntityManager::addPlanetEntity(sf::Vector2f position, sf::Vector2f delta, f
 	sf::Sprite s;
 	s.setOrigin(radius, radius);
 	s.setPosition(position);
-	s.setTexture(Game::getTextureManager().getTestTexture());
+	s.setTexture(*Game::getTextureManager().getTexture(TextureManager::TestPlanet));
 
 	auto size = (radius*2)/s.getTexture()->getSize().x;
 	s.setScale(size, size);
