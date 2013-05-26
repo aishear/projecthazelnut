@@ -66,6 +66,10 @@ EntityManager& Game::getEntityManager() {
 	return _entityManager;
 }
 
+ButtonMap& Game::getButtonMap() {
+	return _buttonMap;
+}
+
 int Game::getScreenWidth() {
 	return Game::_mainWindow.getSize().x;
 }
@@ -134,6 +138,15 @@ void Game::gameLoop() {
 	_entityManager.addPlanetEntity(sf::Vector2f(200, 400), sf::Vector2f(0, 130), 100, 5);
 	_entityManager.addPlanetEntity(sf::Vector2f(250, 400), sf::Vector2f(0, 0), 100, 5);
 
+	sf::Sprite s;
+	sf::Texture* texture = _textureManager.getTexture(TextureManager::EndTurn);
+	s.setPosition(100, 100);
+	s.setTexture(*texture);
+	_entityManager.addButton(sf::Rect<float>(100, 100, 100, 100), [] (){
+		cout << "test";
+	}
+	, s);
+
 	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 
 	while (_mainWindow.isOpen())
@@ -180,6 +193,7 @@ RenderMap  Game::_renderMap;
 PositionMap Game::_positionMap;
 CollisionMap Game::_collisionMap;
 TextureManager Game::_textureManager;
+ButtonMap Game::_buttonMap;
 
 bool Game::_freeLook = false;
 sf::Vector2i Game::_pressPosition;

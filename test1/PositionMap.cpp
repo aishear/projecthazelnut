@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PositionComponent.h"
 #include "PositionMap.h"
+#include "Game.h"
 
 using namespace std;
 
@@ -53,9 +54,15 @@ void PositionMap::updateGravity() {
 }
 
 void PositionMap::updateComponents(float deltaTime) {
+	auto renderMap = Game::getRenderMap();
+
 	for_each(begin(_positionMap), end(_positionMap), [&](pair<unsigned, PositionComponent*> i){
 		auto componentI = i.second;
 		auto deltaPosition = componentI->getDelta() * deltaTime;
 		componentI->setPosition(componentI->getPosition() + deltaPosition);
+
+		//update the sprite position
+		auto id = componentI->getId();
+		renderMap.getRenderComponent(id)->updatePosition(componentI->getPosition());
 	});
 }
