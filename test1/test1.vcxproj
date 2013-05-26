@@ -68,6 +68,7 @@
     <ClCompile Include="ButtonMap.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="CollisionMap.cpp" />
+    <ClCompile Include="ComponentMap.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
@@ -84,6 +85,8 @@
     <ClInclude Include="CollisionMap.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentMap.h" />
     <ClInclude Include="PositionComponent.h" />
     <ClInclude Include="PositionMap.h" />
     <ClInclude Include="RenderComponent.h" />

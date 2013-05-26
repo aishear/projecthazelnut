@@ -13,24 +13,15 @@ RenderMap::~RenderMap() {
 
 }
 
-RenderComponent* RenderMap::getRenderComponent(unsigned id) {
-	return _renderMap.find(id)->second;
-}
-
-void RenderMap::addRenderComponent(unsigned id, sf::Sprite& sprite) {
-	auto rc = new RenderComponent(id, sprite); 
-	_renderMap.insert(pair<unsigned, RenderComponent*>(id, rc));
-}
-
-void RenderMap::removeRenderComponent(unsigned id) {
-	auto rc = _renderMap.find(id)->second;
-	delete rc;
-	_renderMap.erase(id);
+void RenderMap::add(unsigned id, sf::Sprite& sprite) {
+	ComponentMap::add(id, new RenderComponent(id, sprite));
 }
 
 void RenderMap::drawAll() {
-	sf::RenderWindow& window = Game::GetWindow();
-	for_each(begin(_renderMap), end(_renderMap), [&](pair<unsigned, RenderComponent*> i){
-		i.second->draw(window);
-	});
+
+	//sf::RenderWindow& window = Game::GetWindow();
+	//for_each(begin(_componentMap), end(_componentMap), [&](pair<unsigned, Component*> i){
+	//	RenderComponent* rc = (RenderComponent*)i.second;
+	//	rc->draw(window);
+	//});
 }

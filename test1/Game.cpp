@@ -138,6 +138,7 @@ void Game::gameLoop() {
 	_entityManager.addPlanetEntity(sf::Vector2f(200, 400), sf::Vector2f(0, 130), 100, 5);
 	_entityManager.addPlanetEntity(sf::Vector2f(250, 400), sf::Vector2f(0, 0), 100, 5);
 
+	
 	sf::Sprite s;
 	sf::Texture* texture = _textureManager.getTexture(TextureManager::EndTurn);
 	s.setPosition(100, 100);
@@ -146,6 +147,7 @@ void Game::gameLoop() {
 		cout << "test";
 	}
 	, s);
+	
 
 	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 
