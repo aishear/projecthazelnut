@@ -12,16 +12,18 @@ RenderComponent::~RenderComponent() {
 
 }
 
-void RenderComponent::draw(sf::RenderWindow& rw) {
-	auto position = Game::getPositionMap().getPositionComponent(_id)->getPosition();
+void RenderComponent::updatePosition(sf::Vector2f position) {
 	_sprite.setPosition(position);
+}
+
+void RenderComponent::draw(sf::RenderWindow& rw) {
 	rw.draw(_sprite);
-
-	float width = Game::getCollisionMap().getCollisionComponent(_id)->getWidth();
-	sf::CircleShape s(width/2);
-
+	
+	
 	/*
 	//debug circle drawing
+	float width = Game::getCollisionMap().getCollisionComponent(_id)->getWidth();
+	sf::CircleShape s(width/2);	
 	s.setOrigin(width/2, width/2);
 	s.setPosition(position);
 	rw.draw(s);

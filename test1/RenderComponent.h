@@ -8,6 +8,7 @@ public:
 	RenderComponent(unsigned id, sf::Sprite& sprite);
 	~RenderComponent();
 
+	void updatePosition(sf::Vector2f position);
 	void draw(sf::RenderWindow& rw);
 	void changeSize(float factorX, float factorY);
 

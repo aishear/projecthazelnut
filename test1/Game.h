@@ -5,6 +5,7 @@
 #include "PositionMap.h"
 #include "CollisionMap.h"
 #include "TextureManager.h"
+#include "ButtonMap.h"
 
 class Game
 {
@@ -16,6 +17,7 @@ public:
 	static CollisionMap& getCollisionMap();
 	static TextureManager& getTextureManager();
 	static EntityManager& getEntityManager();
+	static ButtonMap& getButtonMap();
 	
 
 	static int getScreenWidth();
@@ -38,6 +40,7 @@ private:
 	static RenderMap _renderMap;
 	static PositionMap _positionMap;
 	static CollisionMap _collisionMap;
+	static ButtonMap _buttonMap;
 	static TextureManager _textureManager;
 
 	static bool _freeLook;

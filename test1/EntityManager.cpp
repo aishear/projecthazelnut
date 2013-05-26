@@ -36,6 +36,16 @@ void EntityManager::addPlanetEntity(sf::Vector2f position, sf::Vector2f delta, f
 	Game::getCollisionMap().addCollisionComponent(id, CollisionComponent::Circle, radius*2, radius*2);
 }
 
+void EntityManager::addButton(sf::Rect<float> bound, std::function<void ()> action, sf::Sprite sprite) {
+	auto id = getNextId();
+	_entityMap.insert(pair<unsigned, EntityType>(id, Button));
+
+	Game::getButtonMap().addButtonComponent(id, action, bound);
+
+	sprite.setPosition(bound.left, bound.top);
+	Game::getRenderMap().addRenderComponent(id, sprite);
+}
+
 void  EntityManager::removeEntity(unsigned id) {
 	auto type = _entityMap.find(id)->second;
 	switch(type) {

@@ -5,7 +5,7 @@ using namespace std;
 
 class EntityManager {
 public:
-	enum EntityType {Planet};
+	enum EntityType {Planet, Button};
 	EntityManager();
 	~EntityManager();
 
@@ -13,6 +13,7 @@ public:
 
 
 	void addPlanetEntity(sf::Vector2f position, sf::Vector2f delta, float mass, float radius);
+	void addButton(sf::Rect<float> bound, std::function<void ()> action, sf::Sprite sprite);
 	void removeEntity(unsigned id);
 	
 	int numEntities();

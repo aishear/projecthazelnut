@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ButtonComponent.cpp" />
+    <ClCompile Include="ButtonMap.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="CollisionMap.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -78,6 +79,7 @@
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ButtonMap.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="CollisionMap.h" />
     <ClInclude Include="EntityManager.h" />
