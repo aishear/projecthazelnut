@@ -4,8 +4,9 @@
 #include "Game.h"
 
 RenderComponent::RenderComponent(unsigned id, sf::Sprite& sprite) 
-	: _id(id), _sprite(sprite)
+	: Component(id), _sprite(sprite)
 {
+
 }
 
 RenderComponent::~RenderComponent() {

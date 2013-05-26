@@ -1,9 +1,10 @@
 #pragma once
 #include "stdafx.h"
+#include "Component.h"
 
 using namespace std;
 
-class RenderComponent {
+class RenderComponent : public Component {
 public:
 	RenderComponent(unsigned id, sf::Sprite& sprite);
 	~RenderComponent();
@@ -14,5 +15,4 @@ public:
 
 private:
 	sf::Sprite _sprite;
-	unsigned _id;
 };

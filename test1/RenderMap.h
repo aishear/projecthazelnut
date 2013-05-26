@@ -1,22 +1,21 @@
 #pragma once
 #include "stdafx.h"
 #include "RenderComponent.h"
+#include "ComponentMap.h"
 
 using namespace std;
 
-class RenderMap {
+class RenderMap : public ComponentMap {
 public:
 
 	RenderMap();
-	~RenderMap();
+	virtual ~RenderMap();
 
-	RenderComponent* getRenderComponent(unsigned id);
-	void addRenderComponent(unsigned id, sf::Sprite& sprite);
-	void removeRenderComponent(unsigned id);
+
+	sf::Sprite& getSprite(unsigned id);
+	void add(unsigned id, sf::Sprite& sprite);
+
+
 	void drawAll();
 
-private:
-	
-
-	map<unsigned, RenderComponent*> _renderMap;
 };

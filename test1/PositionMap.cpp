@@ -63,6 +63,6 @@ void PositionMap::updateComponents(float deltaTime) {
 
 		//update the sprite position
 		auto id = componentI->getId();
-		renderMap.getRenderComponent(id)->updatePosition(componentI->getPosition());
+		((RenderComponent*)renderMap.get(id))->updatePosition(componentI->getPosition());
 	});
 }
