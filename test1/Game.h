@@ -1,25 +1,16 @@
 #pragma once
 #include "stdafx.h"
-#include "EntityManager.h"
-#include "RenderMap.h"
-#include "PositionMap.h"
-#include "CollisionMap.h"
 #include "TextureManager.h"
-#include "ButtonMap.h"
+#include "SlotMap.h"
+#include "Planet.h"
 
 class Game
 {
 public:
 	static void start();
 	static sf::RenderWindow& GetWindow();
-	static RenderMap& getRenderMap();
-	static PositionMap& getPositionMap();
-	static CollisionMap& getCollisionMap();
 	static TextureManager& getTextureManager();
-	static EntityManager& getEntityManager();
-	static ButtonMap& getButtonMap();
 	
-
 	static int getScreenWidth();
 	static int getScreenHeight();
 
@@ -36,15 +27,12 @@ private:
 	static sf::View _view;
 	static sf::Clock _clock;
 
-	static EntityManager _entityManager;
-	static RenderMap _renderMap;
-	static PositionMap _positionMap;
-	static CollisionMap _collisionMap;
-	static ButtonMap _buttonMap;
 	static TextureManager _textureManager;
 
 	static bool _freeLook;
 	static sf::Vector2i _pressPosition;
 	static sf::Vector2i _viewOffset;
 	static float _zoomLevel;
+
+	static SlotMap<GameObject> _planets;
 };

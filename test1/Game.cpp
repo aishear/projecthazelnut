@@ -1,13 +1,11 @@
 #include "stdafx.h"
 #include "Game.h"
-#include "EntityManager.h"
-#include "RenderMap.h"
-#include "PositionMap.h"
-#include "CollisionMap.h"
 #include "TextureManager.h"
-#include "ButtonComponent.h"
-#include <sstream>
-#include <cstdlib>
+#include "Planet.h"
+#include "SlotMap.h"
+#include "Gravity.h"
+#include "Drawer.h"
+#include "GameObject.h"
 
 /*
 _______________________________________
@@ -36,6 +34,8 @@ gavity field view
 void Game::start() {
 
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Title");
+	
+	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 
 	gameLoop();
 
@@ -44,30 +44,6 @@ void Game::start() {
 
 sf::RenderWindow& Game::GetWindow() {
 	return Game::_mainWindow;
-}
-
-RenderMap& Game::getRenderMap() {
-	return Game::_renderMap;
-}
-
-PositionMap& Game::getPositionMap() {
-	return _positionMap;
-}
-
-CollisionMap& Game::getCollisionMap() {
-	return _collisionMap;
-}
-
-TextureManager& Game::getTextureManager() {
-	return _textureManager;
-}
-
-EntityManager& Game::getEntityManager() {
-	return _entityManager;
-}
-
-ButtonMap& Game::getButtonMap() {
-	return _buttonMap;
 }
 
 int Game::getScreenWidth() {
@@ -119,37 +95,21 @@ void Game::updateView(){
 		auto delta = _viewOffset - dragDistance;
 		_viewOffset = dragDistance;
 		_view.move(-delta.x * _zoomLevel, -delta.y * _zoomLevel);
-		
 	}
 }
 
 void Game::gameLoop() {
-
-	//add random planets
-	
-	for (int i = 0; i < 30; i++){
-		int x = rand() % 1000;
-		int y = rand() % 700;
-		_entityManager.addPlanetEntity(sf::Vector2f(x, y), sf::Vector2f(x/100, y/100), 500, 5);
-	}
-	
-
-	_entityManager.addPlanetEntity(sf::Vector2f(500, 400), sf::Vector2f(0, 0), 4000, 60);
-	_entityManager.addPlanetEntity(sf::Vector2f(200, 400), sf::Vector2f(0, 130), 100, 5);
-	_entityManager.addPlanetEntity(sf::Vector2f(250, 400), sf::Vector2f(0, 0), 100, 5);
-
-	
 	sf::Sprite s;
-	sf::Texture* texture = _textureManager.getTexture(TextureManager::EndTurn);
-	s.setPosition(100, 100);
-	s.setTexture(*texture);
-	_entityManager.addButton(sf::Rect<float>(100, 100, 100, 100), [] (){
-		cout << "test";
-	}
-	, s);
-	
+	s.setPosition(50,50);
+	s.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
+	Planet p(sf::Vector2f(0,0), sf::Vector2f(0,10), 10, s, 10);
+	_planets.add(p);
 
-	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+	sf::Sprite ss;
+	ss.setPosition(100,50);
+	ss.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
+	Planet pp(sf::Vector2f(100,0), sf::Vector2f(10,0), 10, ss, 10);
+	_planets.add(pp);
 
 	while (_mainWindow.isOpen())
     {
@@ -158,14 +118,12 @@ void Game::gameLoop() {
         _mainWindow.clear();
 		
 		auto deltaTime = _clock.restart();
-		_positionMap.updateGravity();
-		_collisionMap.resolveCollisions();
-		_positionMap.updateComponents(deltaTime.asSeconds());
-		
 		updateView();
 		_mainWindow.setView(_view);
-		_renderMap.drawAll();
-		
+
+		Drawer::drawAll(_planets.begin(), _planets.end(), _mainWindow);
+		Gravity::updateDeltas(_planets.getAll());
+
 		//draw ui stuff unaffected by view
 		_mainWindow.setView(_mainWindow.getDefaultView());
 		//draw ui stuff here
@@ -190,14 +148,12 @@ void Game::gameLoop() {
 sf::RenderWindow Game::_mainWindow;
 sf::View Game::_view;
 sf::Clock Game::_clock;
-EntityManager  Game::_entityManager;
-RenderMap  Game::_renderMap;
-PositionMap Game::_positionMap;
-CollisionMap Game::_collisionMap;
+
 TextureManager Game::_textureManager;
-ButtonMap Game::_buttonMap;
 
 bool Game::_freeLook = false;
 sf::Vector2i Game::_pressPosition;
 sf::Vector2i Game::_viewOffset;
 float Game::_zoomLevel = 1;
+
+SlotMap<GameObject> Game::_planets;
