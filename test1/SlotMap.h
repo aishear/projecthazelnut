@@ -10,13 +10,14 @@ public:
 		_size = 0;
 	}
 
-	T get(SLOTMAP_ID id) {
-		return _objects[id];
+	T* get(SLOTMAP_ID id) {
+		return &_objects[id];
 	}
 
-	void add(T object) {
+	SLOTMAP_ID add(T object) {
 		_objects.push_back(object);
 		_size++;
+		return _size - 1;
 	}
 
 	void remove(SLOTMAP_ID id) {
@@ -29,11 +30,11 @@ public:
 		return _objects;
 	}
 
-	typename const std::vector<T>::const_iterator begin() {
+	typename const std::vector<T>::iterator begin() {
 		return _objects.begin();
 	}
 
-	typename const std::vector<T>::const_iterator end() {
+	typename const std::vector<T>::iterator end() {
 		return _objects.end();
 	}
 

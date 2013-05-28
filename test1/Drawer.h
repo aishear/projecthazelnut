@@ -5,5 +5,6 @@
 
 class Drawer {
 public:
-	static void drawAll(const std::vector<GameObject>::const_iterator& begin, const std::vector<GameObject>::const_iterator& end, sf::RenderWindow& rw);
+	static void drawAll(const std::vector<GameObject>::iterator& begin, const std::vector<GameObject>::iterator& end, sf::RenderWindow& rw);
+	static void updateGraphics(const std::vector<GameObject>::iterator& begin, const std::vector<GameObject>::iterator& end);
 };

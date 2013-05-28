@@ -7,7 +7,8 @@ public:
 	sf::Vector2f getDelta();
 	float getMass();
 
-	void setDelta(sf::Vector2f delta);
+	void setDelta(sf::Vector2f & delta);
+	void setPosition(sf::Vector2f & position);
 protected:
 	GravBody(sf::Vector2f position, sf::Vector2f initialDelta, float mass);
 
