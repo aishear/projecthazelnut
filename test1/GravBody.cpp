@@ -20,6 +20,10 @@ float GravBody::getMass() {
 	return _mass;
 }
 
-void GravBody::setDelta(sf::Vector2f delta) {
+void GravBody::setDelta(sf::Vector2f & delta) {
 	_delta = delta;
+}
+
+void GravBody::setPosition(sf::Vector2f & position) {
+	_position = position;
 }

@@ -12,3 +12,7 @@ GameObject::GameObject(sf::Vector2f position, sf::Vector2f initialDelta, float m
 void GameObject::draw(sf::RenderWindow& rw) {
 	rw.draw(_sprite);
 }
+
+void GameObject::updateSprite() {
+	_sprite.setPosition(_position);
+}

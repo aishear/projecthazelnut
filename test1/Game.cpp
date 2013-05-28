@@ -34,7 +34,7 @@ gavity field view
 void Game::start() {
 
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Title");
-	
+
 	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 
 	gameLoop();
@@ -100,17 +100,15 @@ void Game::updateView(){
 
 void Game::gameLoop() {
 	sf::Sprite s;
-	s.setPosition(50,50);
 	s.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
-	Planet p(sf::Vector2f(0,0), sf::Vector2f(0,10), 10, s, 10);
-	_planets.add(p);
+	Planet p(sf::Vector2f(20,50), sf::Vector2f(0,100), 10000, s, 10);
+	SLOTMAP_ID id1 = _planets.add(p);
 
 	sf::Sprite ss;
-	ss.setPosition(100,50);
 	ss.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
-	Planet pp(sf::Vector2f(100,0), sf::Vector2f(10,0), 10, ss, 10);
-	_planets.add(pp);
-
+	Planet pp(sf::Vector2f(500,0), sf::Vector2f(10,0), 10000, ss, 10);
+	SLOTMAP_ID id2 = _planets.add(pp);
+	
 	while (_mainWindow.isOpen())
     {
 		handleEvents();
@@ -121,9 +119,10 @@ void Game::gameLoop() {
 		updateView();
 		_mainWindow.setView(_view);
 
+		Drawer::updateGraphics(_planets.begin(), _planets.end());
 		Drawer::drawAll(_planets.begin(), _planets.end(), _mainWindow);
 		Gravity::updateDeltas(_planets.getAll());
-
+		Gravity::updatePositions(_planets.begin(), _planets.end(), deltaTime.asSeconds());
 		//draw ui stuff unaffected by view
 		_mainWindow.setView(_mainWindow.getDefaultView());
 		//draw ui stuff here
@@ -142,7 +141,6 @@ void Game::gameLoop() {
 		GetWindow().setTitle(s); 
 		*/
     }
-
 }
 
 sf::RenderWindow Game::_mainWindow;
