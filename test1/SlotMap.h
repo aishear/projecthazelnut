@@ -1,29 +1,43 @@
 #pragma once
 #include "stdafx.h"
 
-typedef unsigned SLOTMAP_ID;
+typedef int SLOTMAP_ID;
 
 template <class T>
 class SlotMap {
 public:
 	SlotMap() {
 		_size = 0;
+		addSlots(100);
 	}
 
 	T* get(SLOTMAP_ID id) {
-		return &_objects[id];
+		int index = _slots[id];
+		return &_objects[index];
 	}
 
 	SLOTMAP_ID add(T object) {
 		_objects.push_back(object);
 		_size++;
-		return _size - 1;
+
+		if (_freeStack.empty()) {
+			addSlots(100);	
+		}
+		int id = _freeStack.top();
+		_freeStack.pop();
+		_slots[id] = _size - 1;
+
+		return id;
 	}
 
 	void remove(SLOTMAP_ID id) {
-		std::swap(_objects[id], objects.back());
+		int index = _slots[id];
+		_slots[id] = -1;
+		_freeStack.push(id);
+		std::swap(_objects[id], _objects.back());
 		_objects.pop_back();
 		_size--;
+
 	}
 
 	std::vector<T>& getAll() {
@@ -38,7 +52,22 @@ public:
 		return _objects.end();
 	}
 
+	int size() {
+		return _size;
+	}
+
 private:
+
+	void addSlots(int numSlots) {
+		int startingIndex = _slots.size();
+		for (int i = 0; i < numSlots; i++) {
+			_slots.push_back(-1);
+			_freeStack.push(startingIndex + i);
+		}
+	}
+
 	std::vector<T> _objects;
+	std::vector<int> _slots;
+	std::stack<int> _freeStack;
 	int _size;
 };

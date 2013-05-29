@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "GravBody.h"
 #include "IDrawable.h"
+#include "SlotMap.h"
 
 
 class GameObject : public GravBody, public IDrawable {
@@ -12,8 +13,11 @@ public:
 	virtual void updateSprite();
 	virtual bool impact(float damage, GameObject & other);
 	virtual void increaseSize(GameObject & other);
+	void setId(SLOTMAP_ID id);
+	SLOTMAP_ID getId();
 protected:
 	sf::Sprite _sprite;
+	SLOTMAP_ID _id;
 };
 
 /*
