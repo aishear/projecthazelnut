@@ -17,10 +17,19 @@ void GameObject::updateSprite() {
 	_sprite.setPosition(_position);
 }
 
+
 bool GameObject::impact(float damage, GameObject & other) {
 	return false;
 }
 
 void GameObject::increaseSize(GameObject & other) {
 	//do nothing by default
+}
+
+void GameObject::setId(SLOTMAP_ID id) {
+	_id = id;
+}
+
+SLOTMAP_ID GameObject::getId() {
+	return _id;
 }
