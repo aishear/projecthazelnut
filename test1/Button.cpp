@@ -19,3 +19,11 @@ void Button::performAction() {
 bool Button::containsPoint(float x, float y) {
 	return _bound.contains(x, y);
 }
+
+void Button::setId(SLOTMAP_ID id) {
+	_id = id;
+}
+
+SLOTMAP_ID Button::getId() {
+	return _id;
+}

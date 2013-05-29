@@ -3,9 +3,9 @@
 #include "GravBody.h"
 #include "IDrawable.h"
 #include "SlotMap.h"
+#include "ISlotItem.h"
 
-
-class GameObject : public GravBody, public IDrawable {
+class GameObject : public GravBody, public IDrawable, public ISlotItem {
 public:
 
 	GameObject(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Sprite& sprite);
