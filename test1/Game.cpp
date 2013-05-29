@@ -54,7 +54,7 @@ int Game::getScreenHeight() {
 	return Game::_mainWindow.getSize().y;
 }
 
-void Game::handleEvents(){
+void Game::handleEvents() {
 	sf::Event event;
     while (_mainWindow.pollEvent(event))
     {
@@ -62,16 +62,21 @@ void Game::handleEvents(){
 			case sf::Event::Closed:
 				_mainWindow.close();
 				break;
+			
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == sf::Mouse::Right) {
 					_freeLook = true;
 					_pressPosition = sf::Vector2i(_viewOffset.x + event.mouseButton.x, _viewOffset.y + event.mouseButton.y);
+				} else if (event.mouseButton.button == sf::Mouse::Left) {
+					handleLeftClick(event.mouseButton.x, event.mouseButton.y);
 				}
 				break;
+			
 			case sf::Event::MouseButtonReleased:
 				if (event.mouseButton.button == sf::Mouse::Right)
 					_freeLook = false;
 				break;
+			
 			case sf::Event::MouseWheelMoved:
 				int mouseDelta = event.mouseWheel.delta;
 				if (mouseDelta > 0 && _zoomLevel > .5){
@@ -88,6 +93,13 @@ void Game::handleEvents(){
     }
 }
 
+void Game::handleLeftClick(int x, int y) {
+	std::for_each(_buttons.begin(), _buttons.end(), [=](Button & i){
+		if (i.containsPoint((float)x, (float)y))
+			i.performAction();
+	});
+}
+
 void Game::updateView(){
 	if (_freeLook) {
 		auto mousePosition = sf::Mouse::getPosition(_mainWindow);
@@ -99,16 +111,26 @@ void Game::updateView(){
 }
 
 void Game::gameLoop() {
+	
 	sf::Sprite s;
 	s.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
-	Planet p(sf::Vector2f(20,50), sf::Vector2f(0,100), 10000, s, 10);
-	SLOTMAP_ID id1 = _planets.add(p);
-
-	sf::Sprite ss;
-	ss.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
-	Planet pp(sf::Vector2f(500,0), sf::Vector2f(10,0), 10000, ss, 10);
-	SLOTMAP_ID id2 = _planets.add(pp);
 	
+	for (int i = 0; i < 10; i++)
+		for (int j = 0; j < 10; j++)
+			_planets.add(Planet(sf::Vector2f(i * 50, j * 50 + 2*i), sf::Vector2f(0,0), 100, s, 10));
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	sf::Sprite endTurn;
+	endTurn.setTexture(*_textureManager.getTexture(TextureManager::EndTurn));
+	_buttons.add(Button(sf::Rect<float>(5, 5, 100, 60), endTurn, [](){
+		if (_simulationState == Game::Simulate) {
+			_simulationState = Game::Plan;
+		} else {
+			_simulationState = Game::Simulate;
+		}
+	}));
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (_mainWindow.isOpen())
     {
 		handleEvents();
@@ -121,11 +143,16 @@ void Game::gameLoop() {
 
 		Drawer::updateGraphics(_planets.begin(), _planets.end());
 		Drawer::drawAll(_planets.begin(), _planets.end(), _mainWindow);
-		Gravity::updateDeltas(_planets.getAll());
-		Gravity::updatePositions(_planets.begin(), _planets.end(), deltaTime.asSeconds());
+		if (_simulationState == Game::Simulate) {
+			Gravity::updateDeltas(_planets.getAll());
+			Gravity::updatePositions(_planets.begin(), _planets.end(), deltaTime.asSeconds());
+		}
 		//draw ui stuff unaffected by view
 		_mainWindow.setView(_mainWindow.getDefaultView());
 		//draw ui stuff here
+		std::for_each(_buttons.begin(), _buttons.end(), [](Button & i){
+			i.draw(_mainWindow);
+		});
 
         _mainWindow.display();
 
@@ -154,4 +181,8 @@ sf::Vector2i Game::_pressPosition;
 sf::Vector2i Game::_viewOffset;
 float Game::_zoomLevel = 1;
 
+Game::State Game::_simulationState = Game::Plan;
+
 SlotMap<GameObject> Game::_planets;
+
+SlotMap<Button> Game::_buttons;

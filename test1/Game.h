@@ -3,10 +3,14 @@
 #include "TextureManager.h"
 #include "SlotMap.h"
 #include "Planet.h"
+#include "Button.h"
 
 class Game
 {
 public:
+
+	enum State {Simulate, Plan};
+	
 	static void start();
 	static sf::RenderWindow& GetWindow();
 	static TextureManager& getTextureManager();
@@ -21,6 +25,7 @@ private:
 
 	static void gameLoop();
 	static void handleEvents();
+	static void handleLeftClick(int x, int y);
 	static void updateView();
 
 	static sf::RenderWindow _mainWindow;
@@ -34,5 +39,9 @@ private:
 	static sf::Vector2i _viewOffset;
 	static float _zoomLevel;
 
+	static State _simulationState;
+
 	static SlotMap<GameObject> _planets;
+
+	static SlotMap<Button> _buttons;
 };
