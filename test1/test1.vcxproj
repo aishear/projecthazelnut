@@ -83,6 +83,7 @@
     <ClInclude Include="Gravity.h" />
     <ClInclude Include="IDrawable.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="ISlotItem.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="SlotMap.h" />
     <ClInclude Include="stdafx.h" />

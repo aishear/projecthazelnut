@@ -118,12 +118,8 @@ void Game::gameLoop() {
 	for (int i = 0; i < 11; i++) {
 		for (int j = 0; j < 10; j++) {
 			auto p = Planet(sf::Vector2f(i * 50, j * 50 + 2*i), sf::Vector2f(0,0), 100, s, 10);
-			auto id = _planets.add(p);
-			p.setId(id);
+			_planets.add(p);
 		}
-	}
-	for (int i = 0; i < 100; i++) {
-		_planets.get(99)->setPosition(sf::Vector2f(1000, i * 50));
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,7 +132,6 @@ void Game::gameLoop() {
 			_simulationState = Game::Simulate;
 		}
 	}));
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (_mainWindow.isOpen())
     {

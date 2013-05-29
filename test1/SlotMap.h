@@ -16,8 +16,7 @@ public:
 		return &_objects[index];
 	}
 
-	SLOTMAP_ID add(T object) {
-		_objects.push_back(object);
+	SLOTMAP_ID add(T object) {	
 		_size++;
 
 		if (_freeStack.empty()) {
@@ -27,6 +26,9 @@ public:
 		_freeStack.pop();
 		_slots[id] = _size - 1;
 
+		object.setId(id);
+		_objects.push_back(object);
+
 		return id;
 	}
 
@@ -34,10 +36,11 @@ public:
 		int index = _slots[id];
 		_slots[id] = -1;
 		_freeStack.push(id);
-		std::swap(_objects[id], _objects.back());
+		int backId = _objects.back().getId();
+		_slots[backId] = index;
+		std::swap(_objects[index], _objects.back());
 		_objects.pop_back();
 		_size--;
-
 	}
 
 	std::vector<T>& getAll() {
