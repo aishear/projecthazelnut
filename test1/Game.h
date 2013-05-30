@@ -23,6 +23,9 @@ private:
 	const static int SCREEN_WIDTH = 1024;
 	const static int SCREEN_HEIGHT = 768;
 
+	const static float TURN_TIME_LIMIT;
+
+	static void initLevel();
 	static void gameLoop();
 	static void handleEvents();
 	static void handleLeftClick(int x, int y);
@@ -39,9 +42,11 @@ private:
 	static sf::Vector2i _viewOffset;
 	static float _zoomLevel;
 
+	static sf::Clock _turnTimer;
+
 	static State _simulationState;
 
-	static SlotMap<GameObject> _planets;
+	static SlotMap<GameObject> _gBodies;
 
 	static SlotMap<Button> _buttons;
 };

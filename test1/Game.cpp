@@ -6,7 +6,7 @@
 #include "Gravity.h"
 #include "Drawer.h"
 #include "GameObject.h"
-
+#include "Ship.h"
 /*
 _______________________________________
 ---------------TODO LIST---------------
@@ -36,10 +36,38 @@ void Game::start() {
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Title");
 
 	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
-
+	initLevel();
 	gameLoop();
 
 	_mainWindow.close();
+}
+
+void Game::initLevel() {
+	//add planets
+	sf::Sprite s;
+	s.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
+	
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 4; j++) {
+			auto p = Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f(0,0), 1000, s, 10);
+			_gBodies.add(p);
+		}
+	}
+
+	//add end turn button
+	sf::Sprite endTurn;
+	endTurn.setTexture(*_textureManager.getTexture(TextureManager::EndTurn));
+	_buttons.add(Button(sf::Rect<float>(5, 5, 100, 60), endTurn, [](){
+		if (_simulationState == Game::Plan) {
+			_simulationState = Game::Simulate;
+			_turnTimer.restart();
+		}
+	}));
+
+	//add ship
+	sf::Sprite ship;
+	ship.setTexture(*_textureManager.getTexture(TextureManager::Ship));
+	_gBodies.add(Ship(sf::Vector2f(-100, -100), sf::Vector2f(0,0), 100, ship, 20));
 }
 
 sf::RenderWindow& Game::GetWindow() {
@@ -111,28 +139,6 @@ void Game::updateView(){
 }
 
 void Game::gameLoop() {
-	
-	sf::Sprite s;
-	s.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
-	
-	for (int i = 0; i < 11; i++) {
-		for (int j = 0; j < 10; j++) {
-			auto p = Planet(sf::Vector2f(i * 50, j * 50 + 2*i), sf::Vector2f(0,0), 100, s, 10);
-			_planets.add(p);
-		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	sf::Sprite endTurn;
-	endTurn.setTexture(*_textureManager.getTexture(TextureManager::EndTurn));
-	_buttons.add(Button(sf::Rect<float>(5, 5, 100, 60), endTurn, [](){
-		if (_simulationState == Game::Simulate) {
-			_simulationState = Game::Plan;
-		} else {
-			_simulationState = Game::Simulate;
-		}
-	}));
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	while (_mainWindow.isOpen())
     {
 		handleEvents();
@@ -143,11 +149,18 @@ void Game::gameLoop() {
 		updateView();
 		_mainWindow.setView(_view);
 
-		Drawer::updateGraphics(_planets.begin(), _planets.end());
-		Drawer::drawAll(_planets.begin(), _planets.end(), _mainWindow);
+		Drawer::updateGraphics(_gBodies.begin(), _gBodies.end());
+
+		Drawer::drawAll(_gBodies.begin(), _gBodies.end(), _mainWindow);
+
 		if (_simulationState == Game::Simulate) {
-			Gravity::updateDeltas(_planets.getAll());
-			Gravity::updatePositions(_planets.begin(), _planets.end(), deltaTime.asSeconds());
+			Gravity::updateDeltas(_gBodies.getAll());
+			Gravity::updatePositions(_gBodies.begin(), _gBodies.end(), deltaTime.asSeconds());
+
+			//check to see if turn is finished
+			if (_turnTimer.getElapsedTime().asSeconds() > TURN_TIME_LIMIT) {
+				_simulationState = Game::Plan;
+			}
 		}
 		//draw ui stuff unaffected by view
 		_mainWindow.setView(_mainWindow.getDefaultView());
@@ -158,6 +171,7 @@ void Game::gameLoop() {
 
         _mainWindow.display();
 
+		
 		//update title
 		/*
 		ostringstream ss;
@@ -176,6 +190,9 @@ sf::RenderWindow Game::_mainWindow;
 sf::View Game::_view;
 sf::Clock Game::_clock;
 
+sf::Clock Game::_turnTimer;
+const float Game::TURN_TIME_LIMIT = 3;
+
 TextureManager Game::_textureManager;
 
 bool Game::_freeLook = false;
@@ -185,6 +202,6 @@ float Game::_zoomLevel = 1;
 
 Game::State Game::_simulationState = Game::Plan;
 
-SlotMap<GameObject> Game::_planets;
+SlotMap<GameObject> Game::_gBodies;
 
 SlotMap<Button> Game::_buttons;

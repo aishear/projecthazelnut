@@ -8,7 +8,8 @@ public:
 
 	static enum TextureType {
 		TestPlanet,
-		EndTurn
+		EndTurn,
+		Ship
 	};
 
 	TextureManager();
@@ -17,5 +18,5 @@ public:
 private:
 	std::map<std::string, sf::Texture*> _textures;
 	static const char* const paths[];
-	static const int NUM_IMAGES = 2;
+	static const int NUM_IMAGES = 3;
 };
