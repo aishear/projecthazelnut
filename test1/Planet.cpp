@@ -14,9 +14,24 @@ Planet::Planet(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf:
 }
 
 bool Planet::impactBy(float damage, GameObject* other) {
-	return true;
+	bool destroyMe = false;
+	if (_mass < other->getMass()) {
+		destroyMe = true;
+		other->increaseSize(this);
+	} else if (_mass == other->getMass()) {
+		destroyMe = true;
+	}
+	return destroyMe;
 }
 
 void Planet::increaseSize(GameObject* other) {
+	_radius = sqrt(pow(_radius, 2) + pow(other->getRadius(), 2));
+	auto size = (_radius*2)/_sprite.getTexture()->getSize().x;
+	_sprite.setScale(size, size);
 
+	_mass += other->getMass();
+}
+
+float Planet::getRadius() {
+	return _radius;
 }

@@ -50,7 +50,7 @@ void Game::initLevel() {
 	
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 4; j++) {
-			_gBodies.add(new Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f(0,0), 1000, s, 10));
+			_gBodies.add(new Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f(0,0), 100 + i*j, s, 10 +i+j));
 		}
 	}
 

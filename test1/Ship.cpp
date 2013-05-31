@@ -17,7 +17,7 @@ Ship::Ship(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Spr
 }
 
 bool Ship::impactBy(float damage, GameObject* other) {
-	return false;
+	return (_hull <= 0);
 }
 
 void Ship::increaseSize(GameObject* other) {
