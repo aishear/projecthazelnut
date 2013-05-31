@@ -15,7 +15,7 @@ Bullet::Bullet(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf:
 }
 
 bool Bullet::impactBy(float damage, GameObject* other) {
-	return false;
+	return true;
 }
 
 void Bullet::increaseSize(GameObject* other) {

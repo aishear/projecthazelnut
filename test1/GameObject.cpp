@@ -34,8 +34,20 @@ void GameObject::setId(SLOTMAP_ID id) {
 	_id = id;
 }
 
+void GameObject::setMass(float mass) {
+	_mass = mass;
+}
+
 SLOTMAP_ID GameObject::getId() {
 	return _id;
+}
+
+float GameObject::getMass() {
+	return _mass;
+}
+
+float GameObject::getRadius() {
+	return _sprite.getTextureRect().width / 2;
 }
 
 sf::FloatRect GameObject::getBound() {

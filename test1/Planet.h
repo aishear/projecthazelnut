@@ -9,6 +9,7 @@ public:
 	Planet(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Sprite& sprite, float radius);
 	virtual bool impactBy(float damage, GameObject* other);
 	virtual void increaseSize(GameObject* other);
+	virtual float getRadius();
 private:
 	float _radius;
 };

@@ -7,8 +7,11 @@ void Collision::detectCollisions(const std::vector<GameObject*>::iterator& begin
 	std::for_each(begin, end, [&](GameObject* i) {
 		std::for_each(begin, end, [&i](GameObject* j) {
 			if (i->getId() != j->getId()){
-				if (i->getBound().intersects(j->getBound())) {
-					Collision::collisions.push(std::pair<GameObject*, GameObject*>(i, j));
+				if (i->getBound().intersects(j->getBound())) { //wide check
+					//close check
+					if (Collision::isCircleColliding(i->getPosition(), i->getRadius(), j->getPosition(), j->getRadius())) { //TODO make this work for every kind of shape
+						Collision::collisions.push(std::pair<GameObject*, GameObject*>(i, j));
+					}
 				}
 			}
 		});

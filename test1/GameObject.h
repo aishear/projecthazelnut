@@ -15,7 +15,10 @@ public:
 	virtual void increaseSize(GameObject* other);
 	virtual float getDamage();
 	void setId(SLOTMAP_ID id);
+	void setMass(float mass);
 	SLOTMAP_ID getId();
+	float getMass();
+	virtual float getRadius();
 	sf::FloatRect getBound();
 protected:
 	sf::Sprite _sprite;
