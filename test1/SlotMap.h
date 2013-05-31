@@ -11,9 +11,9 @@ public:
 		addSlots(100);
 	}
 
-	T* get(SLOTMAP_ID id) {
+	T get(SLOTMAP_ID id) {
 		int index = _slots[id];
-		return &_objects[index];
+		return _objects[index];
 	}
 
 	SLOTMAP_ID add(T object) {	
@@ -26,7 +26,7 @@ public:
 		_freeStack.pop();
 		_slots[id] = _size - 1;
 
-		object.setId(id);
+		object->setId(id);
 		_objects.push_back(object);
 
 		return id;
@@ -36,9 +36,10 @@ public:
 		int index = _slots[id];
 		_slots[id] = -1;
 		_freeStack.push(id);
-		int backId = _objects.back().getId();
+		int backId = _objects.back()->getId();
 		_slots[backId] = index;
 		std::swap(_objects[index], _objects.back());
+		delete _objects[_size - 1];
 		_objects.pop_back();
 		_size--;
 	}

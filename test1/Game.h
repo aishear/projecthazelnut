@@ -17,7 +17,7 @@ public:
 	
 	static int getScreenWidth();
 	static int getScreenHeight();
-
+	static void removeGBody(SLOTMAP_ID id);
 private:
 
 	const static int SCREEN_WIDTH = 1024;
@@ -30,7 +30,6 @@ private:
 	static void handleEvents();
 	static void handleLeftClick(int x, int y);
 	static void updateView();
-
 	static sf::RenderWindow _mainWindow;
 	static sf::View _view;
 	static sf::Clock _clock;
@@ -46,7 +45,7 @@ private:
 
 	static State _simulationState;
 
-	static SlotMap<GameObject> _gBodies;
+	static SlotMap<GameObject*> _gBodies;
 
-	static SlotMap<Button> _buttons;
+	static SlotMap<Button*> _buttons;
 };

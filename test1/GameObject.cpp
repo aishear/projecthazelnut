@@ -18,12 +18,16 @@ void GameObject::updateSprite() {
 }
 
 
-bool GameObject::impact(float damage, GameObject & other) {
+bool GameObject::impactBy(float damage, GameObject* other) {
 	return false;
 }
 
-void GameObject::increaseSize(GameObject & other) {
+void GameObject::increaseSize(GameObject* other) {
 	//do nothing by default
+}
+
+float GameObject::getDamage() {
+	return _delta.x + _delta.y;
 }
 
 void GameObject::setId(SLOTMAP_ID id) {
@@ -32,4 +36,8 @@ void GameObject::setId(SLOTMAP_ID id) {
 
 SLOTMAP_ID GameObject::getId() {
 	return _id;
+}
+
+sf::FloatRect GameObject::getBound() {
+	return _sprite.getGlobalBounds();
 }

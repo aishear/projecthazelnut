@@ -7,6 +7,7 @@
 #include "Drawer.h"
 #include "GameObject.h"
 #include "Ship.h"
+#include "Collision.h"
 /*
 _______________________________________
 ---------------TODO LIST---------------
@@ -47,17 +48,16 @@ void Game::initLevel() {
 	sf::Sprite s;
 	s.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
 	
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 4; j++) {
-			auto p = Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f(0,0), 1000, s, 10);
-			_gBodies.add(p);
+			_gBodies.add(new Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f(0,0), 1000, s, 10));
 		}
 	}
 
 	//add end turn button
 	sf::Sprite endTurn;
 	endTurn.setTexture(*_textureManager.getTexture(TextureManager::EndTurn));
-	_buttons.add(Button(sf::Rect<float>(5, 5, 100, 60), endTurn, [](){
+	_buttons.add(new Button(sf::Rect<float>(5, 5, 100, 60), endTurn, [](){
 		if (_simulationState == Game::Plan) {
 			_simulationState = Game::Simulate;
 			_turnTimer.restart();
@@ -67,7 +67,7 @@ void Game::initLevel() {
 	//add ship
 	sf::Sprite ship;
 	ship.setTexture(*_textureManager.getTexture(TextureManager::Ship));
-	_gBodies.add(Ship(sf::Vector2f(-100, -100), sf::Vector2f(0,0), 100, ship, 20));
+	_gBodies.add(new Ship(sf::Vector2f(-100, -100), sf::Vector2f(0,0), 100, ship, 20));
 }
 
 sf::RenderWindow& Game::GetWindow() {
@@ -122,9 +122,9 @@ void Game::handleEvents() {
 }
 
 void Game::handleLeftClick(int x, int y) {
-	std::for_each(_buttons.begin(), _buttons.end(), [=](Button & i){
-		if (i.containsPoint((float)x, (float)y))
-			i.performAction();
+	std::for_each(_buttons.begin(), _buttons.end(), [=](Button* i){
+		if (i->containsPoint((float)x, (float)y))
+			i->performAction();
 	});
 }
 
@@ -157,6 +157,9 @@ void Game::gameLoop() {
 			Gravity::updateDeltas(_gBodies.getAll());
 			Gravity::updatePositions(_gBodies.begin(), _gBodies.end(), deltaTime.asSeconds());
 
+			Collision::detectCollisions(_gBodies.begin(), _gBodies.end());
+			Collision::resolveCollisions();
+
 			//check to see if turn is finished
 			if (_turnTimer.getElapsedTime().asSeconds() > TURN_TIME_LIMIT) {
 				_simulationState = Game::Plan;
@@ -165,8 +168,8 @@ void Game::gameLoop() {
 		//draw ui stuff unaffected by view
 		_mainWindow.setView(_mainWindow.getDefaultView());
 		//draw ui stuff here
-		std::for_each(_buttons.begin(), _buttons.end(), [](Button & i){
-			i.draw(_mainWindow);
+		std::for_each(_buttons.begin(), _buttons.end(), [](Button* i){
+			i->draw(_mainWindow);
 		});
 
         _mainWindow.display();
@@ -186,6 +189,10 @@ void Game::gameLoop() {
     }
 }
 
+void Game::removeGBody(SLOTMAP_ID id) {
+	_gBodies.remove(id);
+}
+
 sf::RenderWindow Game::_mainWindow;
 sf::View Game::_view;
 sf::Clock Game::_clock;
@@ -202,6 +209,6 @@ float Game::_zoomLevel = 1;
 
 Game::State Game::_simulationState = Game::Plan;
 
-SlotMap<GameObject> Game::_gBodies;
+SlotMap<GameObject*> Game::_gBodies;
 
-SlotMap<Button> Game::_buttons;
+SlotMap<Button*> Game::_buttons;
