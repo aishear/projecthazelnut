@@ -16,5 +16,6 @@ sf::Texture* TextureManager::getTexture(TextureType type) {
 const char* const TextureManager::paths[] = {
 	"D:/Programming/SFML/projects/projectHazelnut/images/test.png",
 	"D:/Programming/SFML/projects/projectHazelnut/images/endTurn.png",
-	"D:/Programming/SFML/projects/projectHazelnut/images/ship.png"
+	"D:/Programming/SFML/projects/projectHazelnut/images/ship.png",
+	"D:/Programming/SFML/projects/projectHazelnut/images/bullet.png"
 };

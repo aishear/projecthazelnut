@@ -13,10 +13,10 @@ Planet::Planet(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf:
 	_sprite.setScale(size, size);
 }
 
-bool Planet::impact(float damage, GameObject & other) {
-	return false;
+bool Planet::impactBy(float damage, GameObject* other) {
+	return true;
 }
 
-void Planet::increaseSize(GameObject & other) {
+void Planet::increaseSize(GameObject* other) {
 
 }

@@ -5,16 +5,18 @@
 #include "SlotMap.h"
 #include "ISlotItem.h"
 
-class GameObject : public GravBody, public IDrawable, public ISlotItem {
+class GameObject : public GravBody, public virtual IDrawable, public virtual ISlotItem {
 public:
 
 	GameObject(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Sprite& sprite);
 	virtual void draw(sf::RenderWindow& rw);
 	virtual void updateSprite();
-	virtual bool impact(float damage, GameObject & other);
-	virtual void increaseSize(GameObject & other);
+	virtual bool impactBy(float damage, GameObject* other);
+	virtual void increaseSize(GameObject* other);
+	virtual float getDamage();
 	void setId(SLOTMAP_ID id);
 	SLOTMAP_ID getId();
+	sf::FloatRect getBound();
 protected:
 	sf::Sprite _sprite;
 	SLOTMAP_ID _id;
