@@ -9,6 +9,7 @@ public:
 	Ship(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Sprite& sprite, float radius);
 	virtual bool impactBy(float dameage, GameObject* other);
 	virtual void increaseSize(GameObject* other);
+	virtual float getRadius();
 private:
 	float _radius;
 	int _hull;

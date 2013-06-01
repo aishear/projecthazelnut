@@ -18,7 +18,10 @@ bool Planet::impactBy(float damage, GameObject* other) {
 	if (_mass < other->getMass()) {
 		destroyMe = true;
 		other->increaseSize(this);
-	} else if (_mass == other->getMass()) {
+	} else if (_mass > other->getMass()) {
+		float massRatio = other->getMass() / this->getMass(); // smaller / larger
+		this->setDelta(this->getDelta() + (massRatio * other->getDelta()));
+	} else {
 		destroyMe = true;
 	}
 	return destroyMe;
@@ -34,4 +37,16 @@ void Planet::increaseSize(GameObject* other) {
 
 float Planet::getRadius() {
 	return _radius;
+}
+
+void Planet::draw(sf::RenderWindow & rw) {
+	rw.draw(_sprite);
+
+	//debug circle drawing
+	/*
+	sf::CircleShape s(_radius);	
+	s.setOrigin(_radius, _radius);
+	s.setPosition(_position);
+	rw.draw(s);
+	*/
 }

@@ -17,9 +17,29 @@ Ship::Ship(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Spr
 }
 
 bool Ship::impactBy(float damage, GameObject* other) {
+	//bounce off and damage ship
+	if (_mass < other->getMass()) {
+
+	} else if (_mass > other->getMass()) {
+		float massRatio = other->getMass() / this->getMass(); // smaller / larger
+		this->setDelta(this->getDelta() * massRatio); //slow down depending on how large the other object is
+	} else {
+		this->setDelta(this->getDelta() * 0.5f);
+	}
+
+	if (_shield > 0) {
+		_shield -= damage;
+	} else {
+		_hull -= damage;
+	}
+
 	return (_hull <= 0);
 }
 
 void Ship::increaseSize(GameObject* other) {
 
+}
+
+float Ship::getRadius() {
+	return _radius;
 }

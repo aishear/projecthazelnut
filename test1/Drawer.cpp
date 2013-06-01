@@ -3,7 +3,18 @@
 #include "Drawer.h"
 #include "GameObject.h"
 
-void Drawer::drawAll(const std::vector<GameObject*>::iterator& begin, const std::vector<GameObject*>::iterator& end, sf::RenderWindow& rw) {
+void Drawer::drawAll(const std::vector<GameObject*>::iterator& begin, const std::vector<GameObject*>::iterator& end, int numObjects, sf::RenderWindow& rw) {
+	sf::VertexArray trails(sf::Lines, GameObject::TRAIL_LENGTH * numObjects);
+	
+	std::for_each(begin, end, [&trails](GameObject* i){
+		sf::VertexArray& t = trails;
+		std::for_each(i->getTrail()->begin(), i->getTrail()->end(), [&t](sf::Vector2f& point) {
+			t.append(point);
+		});
+	});
+
+	rw.draw(trails);
+
 	std::for_each(begin, end, [&rw](GameObject* i){
 		i->draw(rw);
 	});

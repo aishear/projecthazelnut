@@ -50,7 +50,8 @@ void Game::initLevel() {
 	
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 4; j++) {
-			_gBodies.add(new Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f(0,0), 100 + i*j, s, 10 +i+j));
+			float size = rand() % 100;
+			_gBodies.add(new Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f((rand() % 40) - 20,(rand() % 40) - 20), size, s, size/10));
 		}
 	}
 
@@ -151,7 +152,7 @@ void Game::gameLoop() {
 
 		Drawer::updateGraphics(_gBodies.begin(), _gBodies.end());
 
-		Drawer::drawAll(_gBodies.begin(), _gBodies.end(), _mainWindow);
+		Drawer::drawAll(_gBodies.begin(), _gBodies.end(), _gBodies.size(), _mainWindow);
 
 		if (_simulationState == Game::Simulate) {
 			Gravity::updateDeltas(_gBodies.getAll());
@@ -163,6 +164,13 @@ void Game::gameLoop() {
 			//check to see if turn is finished
 			if (_turnTimer.getElapsedTime().asSeconds() > TURN_TIME_LIMIT) {
 				_simulationState = Game::Plan;
+			}
+			//check to see if trail vertex should be added to gBodies
+			if (_gBodyTrailTimer.getElapsedTime().asSeconds() > TRAIL_TIME) {
+				_gBodyTrailTimer.restart();
+				std::for_each(_gBodies.begin(), _gBodies.end(), [](GameObject* i){
+					i->addTrailPoint();
+				});
 			}
 		}
 		//draw ui stuff unaffected by view
@@ -198,7 +206,9 @@ sf::View Game::_view;
 sf::Clock Game::_clock;
 
 sf::Clock Game::_turnTimer;
-const float Game::TURN_TIME_LIMIT = 3;
+sf::Clock Game::_gBodyTrailTimer;
+const float Game::TURN_TIME_LIMIT = 30;
+const float Game::TRAIL_TIME = 0.3;
 
 TextureManager Game::_textureManager;
 
