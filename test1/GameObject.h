@@ -20,9 +20,18 @@ public:
 	float getMass();
 	virtual float getRadius();
 	sf::FloatRect getBound();
+	void addTrailPoint();
+	std::list<sf::Vector2f> * getTrail();
+
+	static const unsigned TRAIL_LENGTH = 40; //must be even since there are 2 verties in a line
 protected:
 	sf::Sprite _sprite;
 	SLOTMAP_ID _id;
+	std::list<sf::Vector2f> _trail;
+
+private:
+	sf::Vector2f _lastTrailPoint;
+	bool _addTrailLine;
 };
 
 /*

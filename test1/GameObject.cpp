@@ -5,7 +5,8 @@
 GameObject::GameObject(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Sprite& sprite) 
 	: GravBody(position, initialDelta, mass), _sprite(sprite)
 {
-
+	_trail.resize(TRAIL_LENGTH, _position);
+	_addTrailLine = false;
 }
 
 
@@ -52,4 +53,20 @@ float GameObject::getRadius() {
 
 sf::FloatRect GameObject::getBound() {
 	return _sprite.getGlobalBounds();
+}
+
+void GameObject::addTrailPoint() {
+	if (_addTrailLine) {
+		_trail.pop_back();
+		_trail.pop_back();
+		_trail.push_front(_lastTrailPoint);
+		_trail.push_front(_position);
+	} else {
+		_lastTrailPoint = _position;
+	}
+	_addTrailLine = !_addTrailLine;
+}
+
+std::list<sf::Vector2f> * GameObject::getTrail() {
+	return &_trail;
 }

@@ -10,6 +10,7 @@ public:
 	virtual bool impactBy(float damage, GameObject* other);
 	virtual void increaseSize(GameObject* other);
 	virtual float getRadius();
+	virtual void draw(sf::RenderWindow & rw);
 private:
 	float _radius;
 };

@@ -24,6 +24,7 @@ private:
 	const static int SCREEN_HEIGHT = 768;
 
 	const static float TURN_TIME_LIMIT;
+	const static float TRAIL_TIME;
 
 	static void initLevel();
 	static void gameLoop();
@@ -42,6 +43,7 @@ private:
 	static float _zoomLevel;
 
 	static sf::Clock _turnTimer;
+	static sf::Clock _gBodyTrailTimer;
 
 	static State _simulationState;
 
