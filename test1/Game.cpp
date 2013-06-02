@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "Ship.h"
 #include "Collision.h"
+#include "Bullet.h"
 /*
 _______________________________________
 ---------------TODO LIST---------------
@@ -47,9 +48,9 @@ void Game::initLevel() {
 	//add planets
 	sf::Sprite s;
 	s.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
-	
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 4; j++) {
+
+	for (int i = 0; i < 2; i++) {
+		for (int j = 0; j < 10; j++) {
 			float size = rand() % 100;
 			_gBodies.add(new Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f((rand() % 40) - 20,(rand() % 40) - 20), size, s, size/10));
 		}
@@ -69,6 +70,11 @@ void Game::initLevel() {
 	sf::Sprite ship;
 	ship.setTexture(*_textureManager.getTexture(TextureManager::Ship));
 	_gBodies.add(new Ship(sf::Vector2f(-100, -100), sf::Vector2f(0,0), 100, ship, 20));
+
+	//test bullet
+	sf::Sprite bullet;
+	bullet.setTexture(*_textureManager.getTexture(TextureManager::Bullet));
+	_gBodies.add(new Bullet(sf::Vector2f(-67, -100), sf::Vector2f(50,0), 10, bullet, 2));
 }
 
 sf::RenderWindow& Game::GetWindow() {

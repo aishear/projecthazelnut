@@ -70,3 +70,7 @@ void GameObject::addTrailPoint() {
 std::list<sf::Vector2f> * GameObject::getTrail() {
 	return &_trail;
 }
+
+sf::Color GameObject::getTrailColor() {
+	return sf::Color::White;
+}
