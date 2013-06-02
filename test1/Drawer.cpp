@@ -8,11 +8,13 @@ void Drawer::drawAll(const std::vector<GameObject*>::iterator& begin, const std:
 	
 	std::for_each(begin, end, [&trails](GameObject* i){
 		sf::VertexArray& t = trails;
-		std::for_each(i->getTrail()->begin(), i->getTrail()->end(), [&t](sf::Vector2f& point) {
+		sf::Color color = i->getTrailColor();
+		std::for_each(i->getTrail()->begin(), i->getTrail()->end(), [&t, &color](sf::Vector2f& point) {
 			t.append(point);
+			t[t.getVertexCount() - 1].color = color;
 		});
 	});
-
+	
 	rw.draw(trails);
 
 	std::for_each(begin, end, [&rw](GameObject* i){

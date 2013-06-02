@@ -43,3 +43,21 @@ void Ship::increaseSize(GameObject* other) {
 float Ship::getRadius() {
 	return _radius;
 }
+
+void Ship::draw(sf::RenderWindow& rw) {
+	rw.draw(_sprite);
+
+	sf::RectangleShape hull(sf::Vector2f(_radius * (_hull / 100.0f), 3));
+	hull.setPosition(_position.x - _radius, _position.y - _radius - 30);
+	hull.setFillColor(sf::Color::Red);
+	rw.draw(hull);
+
+	sf::RectangleShape shield(sf::Vector2f(_radius * (_shield / 100.0f), 3));
+	shield.setPosition(_position.x - _radius, _position.y - _radius - 20);
+	shield.setFillColor(sf::Color::Blue);
+	rw.draw(shield);
+}
+
+sf::Color Ship::getTrailColor() {
+	return sf::Color::Red;
+}

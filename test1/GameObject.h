@@ -22,6 +22,7 @@ public:
 	sf::FloatRect getBound();
 	void addTrailPoint();
 	std::list<sf::Vector2f> * getTrail();
+	virtual sf::Color getTrailColor();
 
 	static const unsigned TRAIL_LENGTH = 40; //must be even since there are 2 verties in a line
 protected:

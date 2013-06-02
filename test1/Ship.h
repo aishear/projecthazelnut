@@ -10,6 +10,8 @@ public:
 	virtual bool impactBy(float dameage, GameObject* other);
 	virtual void increaseSize(GameObject* other);
 	virtual float getRadius();
+	virtual void draw(sf::RenderWindow& rw);
+	virtual sf::Color getTrailColor();
 private:
 	float _radius;
 	int _hull;
