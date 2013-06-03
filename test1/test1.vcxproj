@@ -70,6 +70,7 @@
     <ClCompile Include="Drawer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectFactory.cpp" />
     <ClCompile Include="GravBody.cpp" />
     <ClCompile Include="Gravity.cpp" />
     <ClCompile Include="main.cpp" />
@@ -84,6 +85,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Drawer.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectFactory.h" />
     <ClInclude Include="GravBody.h" />
     <ClInclude Include="Gravity.h" />
     <ClInclude Include="IDrawable.h" />

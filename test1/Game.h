@@ -4,6 +4,8 @@
 #include "SlotMap.h"
 #include "Planet.h"
 #include "Button.h"
+#include "Ship.h"
+#include "Bullet.h"
 
 class Game
 {
@@ -18,6 +20,11 @@ public:
 	static int getScreenWidth();
 	static int getScreenHeight();
 	static void removeGBody(SLOTMAP_ID id);
+	static void removeShip(SLOTMAP_ID id);
+
+	static SLOTMAP_ID addPlanet(Planet* p);
+	static SLOTMAP_ID addShip(Ship* s);
+	static SLOTMAP_ID addBullet(Bullet* b);
 private:
 
 	const static int SCREEN_WIDTH = 1024;
@@ -45,9 +52,11 @@ private:
 	static sf::Clock _turnTimer;
 	static sf::Clock _gBodyTrailTimer;
 
-	static State _simulationState;
+	static Game::State _simulationState;
+	static Ship* _selectedShip;
 
 	static SlotMap<GameObject*> _gBodies;
+	static std::map<SLOTMAP_ID, Ship*> _ships;
 
 	static SlotMap<Button*> _buttons;
 };

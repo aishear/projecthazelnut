@@ -12,8 +12,14 @@ public:
 	virtual float getRadius();
 	virtual void draw(sf::RenderWindow& rw);
 	virtual sf::Color getTrailColor();
+	void setThrust(float angleRadians, float power);
+	void fire(float angleRadians, float power);
 private:
 	float _radius;
 	int _hull;
 	int _shield;
+
+	float _thrustAngle;
+	float _thrustPower;
+
 };

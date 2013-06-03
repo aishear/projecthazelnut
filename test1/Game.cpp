@@ -15,8 +15,6 @@ _______________________________________
 _______________________________________
 
 - User interface
-- player object
-- projectile object
 - game states
 - main menu
 - in-game menu
@@ -28,14 +26,13 @@ _______________________________________
 
 gavity field view
 -many vectors (drawn as lines) that show gravy field on map
--dotted line trails for objects
-
+-show how gravity effects shot for a short distance
 */
 
 
 void Game::start() {
 
-	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Title");
+	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Project Hazelnut");
 
 	_view.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 	initLevel();
@@ -49,9 +46,9 @@ void Game::initLevel() {
 	sf::Sprite s;
 	s.setTexture(*_textureManager.getTexture(TextureManager::TestPlanet));
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
-			float size = rand() % 100;
+			float size = (rand() % 100) + 10;
 			_gBodies.add(new Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f((rand() % 40) - 20,(rand() % 40) - 20), size, s, size/10));
 		}
 	}
@@ -69,8 +66,10 @@ void Game::initLevel() {
 	//add ship
 	sf::Sprite ship;
 	ship.setTexture(*_textureManager.getTexture(TextureManager::Ship));
-	_gBodies.add(new Ship(sf::Vector2f(-100, -100), sf::Vector2f(0,0), 100, ship, 20));
-
+	Ship* playerShip = new Ship(sf::Vector2f(-100, -100), sf::Vector2f(0,0), 100, ship, 20);
+	addShip(playerShip);
+	_selectedShip = playerShip;
+	
 	//test bullet
 	sf::Sprite bullet;
 	bullet.setTexture(*_textureManager.getTexture(TextureManager::Bullet));
@@ -89,6 +88,10 @@ int Game::getScreenHeight() {
 	return Game::_mainWindow.getSize().y;
 }
 
+TextureManager& Game::getTextureManager() {
+	return _textureManager;
+}
+
 void Game::handleEvents() {
 	sf::Event event;
     while (_mainWindow.pollEvent(event))
@@ -98,6 +101,16 @@ void Game::handleEvents() {
 				_mainWindow.close();
 				break;
 			
+			case sf::Event::KeyPressed:
+				switch(event.key.code) {
+					case sf::Keyboard::Space:
+						_selectedShip->fire(0, 100);
+						break;
+					default:
+						break;
+				}
+				break;
+
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == sf::Mouse::Right) {
 					_freeLook = true;
@@ -178,14 +191,14 @@ void Game::gameLoop() {
 					i->addTrailPoint();
 				});
 			}
+		} else {
+			//draw ui stuff unaffected by view
+			_mainWindow.setView(_mainWindow.getDefaultView());
+			//draw ui stuff here
+			std::for_each(_buttons.begin(), _buttons.end(), [](Button* i){
+				i->draw(_mainWindow);
+			});
 		}
-		//draw ui stuff unaffected by view
-		_mainWindow.setView(_mainWindow.getDefaultView());
-		//draw ui stuff here
-		std::for_each(_buttons.begin(), _buttons.end(), [](Button* i){
-			i->draw(_mainWindow);
-		});
-
         _mainWindow.display();
 
 		
@@ -207,13 +220,31 @@ void Game::removeGBody(SLOTMAP_ID id) {
 	_gBodies.remove(id);
 }
 
+void Game::removeShip(SLOTMAP_ID id) {
+	_ships.erase(id);
+}
+
+SLOTMAP_ID Game::addPlanet(Planet* p) {
+	return _gBodies.add(p);
+}
+
+SLOTMAP_ID Game::addShip(Ship* s) {
+	auto id = _gBodies.add(s);
+	_ships.insert(std::pair<SLOTMAP_ID, Ship*>(id, s));
+	return id;
+}
+
+SLOTMAP_ID Game::addBullet(Bullet* b) {
+	return _gBodies.add(b);
+}
+
 sf::RenderWindow Game::_mainWindow;
 sf::View Game::_view;
 sf::Clock Game::_clock;
 
 sf::Clock Game::_turnTimer;
 sf::Clock Game::_gBodyTrailTimer;
-const float Game::TURN_TIME_LIMIT = 30;
+const float Game::TURN_TIME_LIMIT = 300;
 const float Game::TRAIL_TIME = 0.3;
 
 TextureManager Game::_textureManager;
@@ -224,7 +255,9 @@ sf::Vector2i Game::_viewOffset;
 float Game::_zoomLevel = 1;
 
 Game::State Game::_simulationState = Game::Plan;
+Ship* Game::_selectedShip;
 
 SlotMap<GameObject*> Game::_gBodies;
+std::map<SLOTMAP_ID, Ship*> Game::_ships;
 
 SlotMap<Button*> Game::_buttons;

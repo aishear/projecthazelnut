@@ -28,7 +28,8 @@ void GameObject::increaseSize(GameObject* other) {
 }
 
 float GameObject::getDamage() {
-	return _delta.x + _delta.y;
+	// F=M*A
+	return (abs(_delta.x) + abs(_delta.y)) * _mass;
 }
 
 void GameObject::setId(SLOTMAP_ID id) {

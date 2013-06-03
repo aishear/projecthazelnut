@@ -3,6 +3,7 @@
 #include "Ship.h"
 #include "GravBody.h"
 #include "Game.h"
+#include "GameObjectFactory.h"
 
 Ship::Ship(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Sprite& sprite, float radius) 
 	: GameObject(position, initialDelta, mass, sprite), _radius(radius)
@@ -29,11 +30,20 @@ bool Ship::impactBy(float damage, GameObject* other) {
 
 	if (_shield > 0) {
 		_shield -= damage;
+		if (_shield < 0)
+			_shield = 0;
 	} else {
 		_hull -= damage;
+		if (_hull < 0)
+			_hull = 0;
 	}
 
-	return (_hull <= 0);
+	if (_hull <= 0) {
+		Game::removeShip(_id);
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void Ship::increaseSize(GameObject* other) {
@@ -60,4 +70,14 @@ void Ship::draw(sf::RenderWindow& rw) {
 
 sf::Color Ship::getTrailColor() {
 	return sf::Color::Red;
+}
+
+void Ship::setThrust(float angleRadians, float power) {
+	_thrustAngle = angleRadians;
+	_thrustPower = power;
+}
+	
+void Ship::fire(float angleRadians, float power) {
+	sf::Vector2f bulletPosition(_position.x + 100, _position.y);
+	Game::addBullet(GameObjectFactory::createBullet(bulletPosition, sf::Vector2f(rand() % 30 + 30, (rand() % 60) - 30), 10, 2));
 }
