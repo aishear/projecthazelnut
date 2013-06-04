@@ -17,6 +17,12 @@ Ship::Ship(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Spr
 	_shield = 100;
 }
 
+void Ship::updatePosition(float deltaTime) {
+
+	auto scaledDelta = (_delta + _thrustDelta) * deltaTime;
+	_position += scaledDelta;
+}
+
 bool Ship::impactBy(float damage, GameObject* other) {
 	//bounce off and damage ship
 	if (_mass < other->getMass()) {
@@ -73,11 +79,13 @@ sf::Color Ship::getTrailColor() {
 }
 
 void Ship::setThrust(float angleRadians, float power) {
-	_thrustAngle = angleRadians;
-	_thrustPower = power;
+	_thrustDelta.x = power * cos(angleRadians);
+	_thrustDelta.y = power * -sin(angleRadians);
 }
 	
 void Ship::fire(float angleRadians, float power) {
-	sf::Vector2f bulletPosition(_position.x + 100, _position.y);
-	Game::addBullet(GameObjectFactory::createBullet(bulletPosition, sf::Vector2f(rand() % 30 + 30, (rand() % 60) - 30), 10, 2));
+	sf::Vector2f offset((_radius + 12) * cos(angleRadians), (_radius + 12) * -sin(angleRadians));
+	sf::Vector2f bulletPosition(_position + offset);
+	sf::Vector2f bulletDelta(power * cos(angleRadians), power * sin(angleRadians)); 
+	Game::addBullet(GameObjectFactory::createBullet(bulletPosition, bulletDelta + _delta, 10, 2));
 }

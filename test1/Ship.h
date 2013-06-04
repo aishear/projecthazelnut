@@ -7,6 +7,7 @@
 class Ship : public GameObject {
 public:
 	Ship(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Sprite& sprite, float radius);
+	virtual void updatePosition(float deltaTime);
 	virtual bool impactBy(float dameage, GameObject* other);
 	virtual void increaseSize(GameObject* other);
 	virtual float getRadius();
@@ -19,7 +20,6 @@ private:
 	int _hull;
 	int _shield;
 
-	float _thrustAngle;
-	float _thrustPower;
+	sf::Vector2f _thrustDelta;
 
 };

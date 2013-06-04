@@ -4,26 +4,26 @@
 #include "GameObject.h"
 
 void Drawer::drawAll(const std::vector<GameObject*>::iterator& begin, const std::vector<GameObject*>::iterator& end, int numObjects, sf::RenderWindow& rw) {
-	sf::VertexArray trails(sf::Lines, GameObject::TRAIL_LENGTH * numObjects);
+	_trails.resize(GameObject::TRAIL_LENGTH * numObjects);
 	
-	std::for_each(begin, end, [&trails](GameObject* i){
-		sf::VertexArray& t = trails;
+	std::for_each(begin, end, [](GameObject* i){
 		sf::Color color = i->getTrailColor();
-		std::for_each(i->getTrail()->begin(), i->getTrail()->end(), [&t, &color](sf::Vector2f& point) {
-			t.append(point);
-			t[t.getVertexCount() - 1].color = color;
+		std::for_each(i->getTrail()->begin(), i->getTrail()->end(), [&color](sf::Vector2f& point) {
+			Drawer::_trails.append(sf::Vertex(point, color));
 		});
 	});
 	
-	rw.draw(trails);
+	rw.draw(_trails);
 
 	std::for_each(begin, end, [&rw](GameObject* i){
 		i->draw(rw);
 	});
 }
 
-void Drawer::updateGraphics(const std::vector<GameObject*>::iterator& begin, const std::vector<GameObject*>::iterator& end) {
+void Drawer::updateObjects(const std::vector<GameObject*>::iterator& begin, const std::vector<GameObject*>::iterator& end) {
 	std::for_each(begin, end, [](GameObject* i){
 			i->updateSprite();
 	});
 }
+
+sf::VertexArray Drawer::_trails(sf::Lines);

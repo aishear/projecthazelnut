@@ -49,7 +49,7 @@ void Game::initLevel() {
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0; j < 10; j++) {
 			float size = (rand() % 100) + 10;
-			_gBodies.add(new Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f((rand() % 40) - 20,(rand() % 40) - 20), size, s, size/10));
+			_gBodies.add(new Planet(sf::Vector2f(i * 100, j * 100 + 20*i), sf::Vector2f(0, 0), size, s, size/10));
 		}
 	}
 
@@ -104,7 +104,19 @@ void Game::handleEvents() {
 			case sf::Event::KeyPressed:
 				switch(event.key.code) {
 					case sf::Keyboard::Space:
-						_selectedShip->fire(0, 100);
+						if (_selectedShip) _selectedShip->fire(rand(), 100);
+						break;
+					case sf::Keyboard::Up:
+						_selectedShip->setThrust(3.1415 / 2, 30);
+						break;
+					case sf::Keyboard::Down:
+						_selectedShip->setThrust((3 * 3.1415) / 2, 30);
+						break;
+					case sf::Keyboard::Left:
+						_selectedShip->setThrust(3.1415, 30);
+						break;
+					case sf::Keyboard::Right:
+						_selectedShip->setThrust(0, 30);
 						break;
 					default:
 						break;
@@ -169,12 +181,12 @@ void Game::gameLoop() {
 		updateView();
 		_mainWindow.setView(_view);
 
-		Drawer::updateGraphics(_gBodies.begin(), _gBodies.end());
+		Drawer::updateObjects(_gBodies.begin(), _gBodies.end());
 
 		Drawer::drawAll(_gBodies.begin(), _gBodies.end(), _gBodies.size(), _mainWindow);
 
 		if (_simulationState == Game::Simulate) {
-			Gravity::updateDeltas(_gBodies.getAll());
+			Gravity::updateDeltas(_gBodies.getAll(), deltaTime.asSeconds());
 			Gravity::updatePositions(_gBodies.begin(), _gBodies.end(), deltaTime.asSeconds());
 
 			Collision::detectCollisions(_gBodies.begin(), _gBodies.end());

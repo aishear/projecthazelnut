@@ -2,7 +2,7 @@
 #include "stdafx.h"
 #include "Gravity.h"
 
-void Gravity::updateDeltas(std::vector<GameObject*>& objects) {
+void Gravity::updateDeltas(std::vector<GameObject*>& objects, float deltaTime) {
 	std::vector<GameObject*>::iterator i;
 	std::vector<GameObject*>::iterator j;
 
@@ -18,6 +18,7 @@ void Gravity::updateDeltas(std::vector<GameObject*>& objects) {
 			if (difference.x != 0 && difference.y != 0){ //prevent division by zero
 				float distance = sqrt(difference.x*difference.x + difference.y*difference.y);
 				sf::Vector2f acceleration =  1.f * (*j)->getMass() * (difference / (distance*distance*distance));
+				acceleration *= deltaTime;
 				(*i)->setDelta((*i)->getDelta() - acceleration);
 			}
 			
@@ -27,7 +28,6 @@ void Gravity::updateDeltas(std::vector<GameObject*>& objects) {
 
 void Gravity::updatePositions(const std::vector<GameObject*>::iterator& begin, const std::vector<GameObject*>::iterator& end, float deltaTime) {
 	std::for_each(begin, end, [&deltaTime](GameObject* i) {
-		auto scaledDelta = i->getDelta() * deltaTime;
-		i->setPosition(i->getPosition() + scaledDelta);
+		i->updatePosition(deltaTime);
 	});
 }

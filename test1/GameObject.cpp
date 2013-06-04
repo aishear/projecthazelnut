@@ -18,6 +18,9 @@ void GameObject::updateSprite() {
 	_sprite.setPosition(_position);
 }
 
+void GameObject::updatePosition(float deltaTime) {
+	_position += _delta;
+}
 
 bool GameObject::impactBy(float damage, GameObject* other) {
 	return false;
