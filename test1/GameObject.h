@@ -11,6 +11,7 @@ public:
 	GameObject(sf::Vector2f position, sf::Vector2f initialDelta, float mass, sf::Sprite& sprite);
 	virtual void draw(sf::RenderWindow& rw);
 	virtual void updateSprite();
+	virtual void updatePosition(float deltaTime);
 	virtual bool impactBy(float damage, GameObject* other);
 	virtual void increaseSize(GameObject* other);
 	virtual float getDamage();
